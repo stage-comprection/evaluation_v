@@ -22,7 +22,18 @@ int main(int argc, char *argv[]) {
 
         master.evaluation();
 
-        std::cout << std::endl << " >> Gain = " << master.output.gain << std::endl;
+        std::cout << "\n--------------------------------------\n\n";
+        std::cout << "Gain : " << master.output.gain << "\n";
+        std::cout << "True Positives : " << master.output.truePositives << "\n";
+        std::cout << "False Positives : " << master.output.falsePositives << "\n";
+        std::cout << "False Negatives : " << master.output.falseNegatives << "\n";
+        std::cout << "\n--------------------------------------\n\n";
+        std::cout << "Total number of reads : " << master.output.nReadsTotal << "\n";
+        std::cout << "Reads processed : " << master.output.nReadsProcessed << "\n";
+        std::cout << "Reads with length problem : " << master.output.wrongSize << "\n";
+        std::cout << "Reads rightly corrected : " << master.output.goodCorrection << "\n";
+        std::cout << "Reads corrected and found in reference : " << master.output.correctedInRef << "\n";
+        std::cout << "Reads wrongly corrected : " << master.output.badCorrection << "\n\n";
     }
 
     return 0;

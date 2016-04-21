@@ -98,37 +98,3 @@ std::string reverseComplement(const std::string& read){
 
     return revComp;
 }
-
-
-
-
-uint find_max(std::ifstream& file){
-
-    Read r;
-    std::string line;
-    std::vector<Read> v;
-
-    while(std::getline(file, line)){
-
-        if (line[0] == '>'){
-
-            r.id = std::stoi(line.substr(1));
-
-        } else {
-
-            r.seq = line;
-            v.push_back(r);
-        }
-    }
-
-    uint m = 0;
-
-    for (uint i = 0; i < v.size(); ++i){
-
-        if (v[i].id > m) m = v[i].id;
-    }
-
-    resetFileIndex(file);
-
-    return m;
-}

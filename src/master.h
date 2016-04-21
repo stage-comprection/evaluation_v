@@ -3,8 +3,8 @@
 #include "file_handling.h"
 #include "settings.h"
 #include "output.h"
-#include "read.h"
 #include "computations.h"
+#include "readStorage.h"
 
 #include <thread>
 
@@ -15,11 +15,11 @@ class Master {
 
         std::vector<std::string> referenceGenome;
 
-        Master(std::vector<std::string> settingsVector);
-
         Output output;
 
         const Settings settings;
+
+        Master(std::vector<std::string> settingsVector);
 
         // Loads small read files in memory, compares original/corrected/reference sequences and increments counters accordingly
         void processOneBatch(uint n);

@@ -13,15 +13,15 @@ settingsVector[3], settingsVector[4], settingsVector[5], settingsVector[6] }
 // Main part of the program, handles multithreading
 void Master::evaluation() {
 
-    // Gets original, corrected and reference sequences and stores them in temporary files (assigns one thread to each process)
-    std::thread splitOriginal(splitReadFile, settings.readsFileName, settings.nTempFiles);
-    std::thread splitCorrected(splitReadFile, settings.correctedFileName, settings.nTempFiles);
-    std::thread splitReference(splitReadFile, settings.referenceFileName, settings.nTempFiles);
+//    // Gets original, corrected and reference sequences and stores them in temporary files (assigns one thread to each process)
+//    std::thread splitOriginal(splitReadFile, settings.readsFileName, settings.nTempFiles);
+//    std::thread splitCorrected(splitReadFile, settings.correctedFileName, settings.nTempFiles);
+//    std::thread splitReference(splitReadFile, settings.referenceFileName, settings.nTempFiles);
 
-    // Synchronizes threads:
-    splitOriginal.join();
-    splitCorrected.join();
-    splitReference.join();
+//    // Synchronizes threads:
+//    splitOriginal.join();
+//    splitCorrected.join();
+//    splitReference.join();
 
     uint processedBatches = 0;
     std::vector<std::thread> threads;
@@ -32,10 +32,11 @@ void Master::evaluation() {
 
         for (uint i=0; i<settings.nThreads; ++i) {
 
-            std::cout << "Processing batch : " << processedBatches << " / " << settings.nTempFiles << std::endl;
+            std::cout << "\nProcessing batch : " << processedBatches << " / " << settings.nTempFiles << std::endl;
 
             threads.push_back(std::thread(&Master::processOneBatch, this, processedBatches));
             ++processedBatches;
+            if (processedBatches > settings.nTempFiles) break;
         }
 
         for(auto &t : threads){
@@ -43,7 +44,7 @@ void Master::evaluation() {
         }
     }
 
-    cleanupTempFiles();
+//    cleanupTempFiles();
 
     computeGain(output);
 
@@ -57,17 +58,28 @@ void Master::evaluation() {
 // Loads small read files in memory, compares original/corrected/reference sequences and increments counters accordingly
 void Master::processOneBatch(uint batchNumber){
 
-    std::vector<ReadPair> reads = getReadsFromTempFiles(batchNumber, settings);
+    readMap reads;
 
-    for (uint i=0; i<reads.size(); ++i){
+    getReadsFromTempFiles(reads, batchNumber, settings);
 
-        analyze(reads[i], output, referenceGenome);
+    uint count = 0, nreads = reads.size();
+    uint step = (uint) nreads/100;
+    uint stepCount = 0;
 
+    std::cout << " - ";
+
+    for (readMap::iterator it = reads.begin(); it != reads.end(); ++it){
+
+        analyze(it->second, output, referenceGenome);
+
+        if (count % step == 0){
+
+            std::cout << "\r  - Analyzing : " << stepCount << " % completed (" << nreads << " reads total).";
+            ++stepCount;
+        }
+
+        ++count;
     }
+
+    std::cout << "\r  - Analyzing : 100 % completed (" << nreads << " reads total).";
 }
-
-
-
-
-
-

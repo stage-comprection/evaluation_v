@@ -1,10 +1,13 @@
 #pragma once
 
-#include "read.h"
 #include "output.h"
-#include "vector"
+#include "readStorage.h"
 
-void analyze(ReadPair& readPair, Output& output, std::vector<std::string>& referenceGenome);
+#include <vector>
+#include <string>
+#include <unordered_map>
+
+void analyze(Triplet& read, Output& output, std::vector<std::string>& referenceGenome);
 
 void computeGain(Output& output);
 
