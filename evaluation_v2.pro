@@ -10,13 +10,17 @@ SOURCES += \
     src/master.cpp \
     src/file_handling.cpp \
     src/computations.cpp \
-    src/utils.cpp
+    src/utils.cpp \
+    src/mapper.cpp \
+    src/binary.cpp
 
 HEADERS += \
     src/master.h \
     src/file_handling.h \
     src/settings.h \
     src/output.h \
-    src/read.h \
     src/computations.h \
-    src/utils.h
+    src/utils.h \
+    src/readStorage.h \
+    src/mapper.h \
+    src/binary.h

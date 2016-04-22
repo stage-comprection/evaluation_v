@@ -1,21 +1,80 @@
 #pragma once
-#include <bitset>
-#include <unordered_map>
 
-// Bitset of length 2 to store a nucleotide
-typedef std::bitset<2> nuc;
+#include <utility>
+#include <iostream>
 
-// Hash maps used for conversion between char and nuc
-std::unordered_map<char, nuc> char2nuc_map = {{'A', nuc (0)}, {'T', nuc (3)}, {'C', nuc (2)}, {'G', nuc (1)}};
-std::unordered_map<nuc, char> nuc2char_map = {{nuc (0), 'A'}, {nuc (3), 'T'}, {nuc (2), 'T'}, {nuc (1), 'G'}};
+typedef unsigned int uint;
 
-// Functions converting char into nuc and nuc into char
-nuc char2nuc(char c);
-char nuc2char(nuc n);
+// Convert a sequence of char into binary
+template <typename T>
+void seq2bin(char* seq, T& bin, const uint s){
 
-// Functions converting a sequence of nuc into char and a sequence of char into nuc
-void seq2bin(char* seq, nuc* binSeq);
-void bin2seq(nuc* binSeq, char* seq);
+    for (uint i=0; i < s; ++i){
 
-// Reverse complement
-void revComp(nuc* seq, nuc* r_seq);
+        switch(seq[i]){
+
+            case 'T':
+                bin.flip(2*i);
+                bin.flip(2*i+1);
+                break;
+
+            case 'C':
+                bin.flip(2*i);
+                break;
+
+            case 'G':
+                bin.flip(2*i+1);
+                break;
+
+            default:
+                break;
+        }
+    }
+}
+
+
+// Convert a binary sequence into char
+template <typename T>
+void bin2seq(T& bin, char* seq, const uint s){
+
+    for (uint i=0; i<s; i+=2){
+
+        switch(bin[i]){
+            case 1:
+                switch(bin[i+1]){
+                    case 1:
+                        seq[i/2] = 'T';
+                        break;
+                    default:
+                        seq[i/2] = 'G';
+                        break;
+                }
+                break;
+            default:
+                switch(bin[i+1]){
+                    case 1:
+                        seq[i/2] = 'C';
+                        break;
+                    default:
+                        seq[i/2] = 'A';
+                        break;
+                }
+                break;
+        }
+    }
+}
+
+
+template <typename T>
+T revComp(T& b){
+
+    T r;
+    uint s = b.size()-1;
+
+    for (int i=s; i>=0; --i){
+
+        r.set(s-i, !b[i]);
+    }
+
+    return r;
+}
