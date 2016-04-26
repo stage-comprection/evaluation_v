@@ -13,15 +13,15 @@ settingsVector[3], settingsVector[4], settingsVector[5], settingsVector[6] }
 // Main part of the program, handles multithreading
 void Master::evaluation() {
 
-//    // Gets original, corrected and reference sequences and stores them in temporary files (assigns one thread to each process)
-//    std::thread splitOriginal(splitReadFile, settings.readsFileName, settings.nTempFiles);
-//    std::thread splitCorrected(splitReadFile, settings.correctedFileName, settings.nTempFiles);
-//    std::thread splitReference(splitReadFile, settings.referenceFileName, settings.nTempFiles);
+    // Gets original, corrected and reference sequences and stores them in temporary files (assigns one thread to each process)
+    std::thread splitOriginal(splitReadFile, settings.readsFileName, settings.nTempFiles);
+    std::thread splitCorrected(splitReadFile, settings.correctedFileName, settings.nTempFiles);
+    std::thread splitReference(splitReadFile, settings.referenceFileName, settings.nTempFiles);
 
-//    // Synchronizes threads:
-//    splitOriginal.join();
-//    splitCorrected.join();
-//    splitReference.join();
+    // Synchronizes threads:
+    splitOriginal.join();
+    splitCorrected.join();
+    splitReference.join();
 
     uint processedBatches = 0;
     std::vector<std::thread> threads;
@@ -44,7 +44,7 @@ void Master::evaluation() {
         }
     }
 
-//    cleanupTempFiles();
+    cleanupTempFiles();
 
     computeGain(output);
 
@@ -68,9 +68,9 @@ void Master::processOneBatch(uint batchNumber){
 
     std::cout << " - ";
 
-    for (readMap::iterator it = reads.begin(); it != reads.end(); ++it){
+    for (uint i=0; i< nreads; ++i){
 
-        analyze(it->second, output, referenceGenome);
+        analyze(reads[i].second, output, referenceGenome);
 
         if (count % step == 0){
 

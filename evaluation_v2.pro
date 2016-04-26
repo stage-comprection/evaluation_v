@@ -11,8 +11,7 @@ SOURCES += \
     src/file_handling.cpp \
     src/computations.cpp \
     src/utils.cpp \
-    src/mapper.cpp \
-    src/binary.cpp
+    src/mapper.cpp
 
 HEADERS += \
     src/master.h \

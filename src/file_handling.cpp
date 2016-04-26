@@ -1,4 +1,5 @@
 #include "file_handling.h"
+#include "binary.h"
 
 // Reads settings from configuration file
 std::vector<std::string> readSettingsFile(const std::string& settingsFilePath){
@@ -109,6 +110,7 @@ void splitReadFile(const std::string& fileName, uint n) {
     file.open(fileName);
 
     std::string line;
+
     uint readNumber = 0, fileNumber = 0;
 
     while(std::getline(file, line)){

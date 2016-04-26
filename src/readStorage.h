@@ -1,13 +1,14 @@
 #pragma once
 
-#include <string>
+#include "binary.h"
+
 #include <unordered_map>
 
 struct Triplet{
 
-    std::string original;
-    std::string corrected;
-    std::string reference;
+    read original;
+    read corrected;
+    read reference;
 };
 
 typedef std::unordered_map<uint, Triplet> readMap;

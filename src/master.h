@@ -13,7 +13,8 @@ class Master {
 
     public:
 
-        std::vector<std::string> referenceGenome;
+        template <typename T>
+        std::vector<T> referenceGenome;
 
         Output output;
 
