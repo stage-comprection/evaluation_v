@@ -4,7 +4,7 @@
 #include "settings.h"
 #include "output.h"
 #include "computations.h"
-#include "readStorage.h"
+#include "read_storage.h"
 
 #include <thread>
 
@@ -13,8 +13,7 @@ class Master {
 
     public:
 
-        template <typename T>
-        std::vector<T> referenceGenome;
+        std::vector<std::string> referenceGenome;
 
         Output output;
 

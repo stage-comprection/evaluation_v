@@ -32,17 +32,18 @@ void Master::evaluation() {
 
         for (uint i=0; i<settings.nThreads; ++i) {
 
-            std::cout << "\nProcessing batch : " << processedBatches << " / " << settings.nTempFiles << std::endl;
+            std::cout << "\nProcessing batch : " << processedBatches << " / " << settings.nTempFiles - 1 << std::endl;
 
             threads.push_back(std::thread(&Master::processOneBatch, this, processedBatches));
             ++processedBatches;
-            if (processedBatches > settings.nTempFiles) break;
+            if (processedBatches == settings.nTempFiles) break;
         }
 
         for(auto &t : threads){
              t.join();
         }
     }
+
 
     cleanupTempFiles();
 
@@ -62,24 +63,12 @@ void Master::processOneBatch(uint batchNumber){
 
     getReadsFromTempFiles(reads, batchNumber, settings);
 
-    uint count = 0, nreads = reads.size();
-    uint step = (uint) nreads/100;
-    uint stepCount = 0;
+    for (auto it=reads.cbegin(); it != reads.cend(); ++it){
 
-    std::cout << " - ";
+        Triplet r = it->second;
+        analyze(r, output, referenceGenome);
 
-    for (uint i=0; i< nreads; ++i){
-
-        analyze(reads[i].second, output, referenceGenome);
-
-        if (count % step == 0){
-
-            std::cout << "\r  - Analyzing : " << stepCount << " % completed (" << nreads << " reads total).";
-            ++stepCount;
-        }
-
-        ++count;
     }
 
-    std::cout << "\r  - Analyzing : 100 % completed (" << nreads << " reads total).";
+    reads.clear();
 }
