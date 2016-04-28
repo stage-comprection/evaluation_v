@@ -2,7 +2,6 @@
 #include "settings.h"
 #include "file_handling.h"
 #include "binary.h"
-#include "mapping/mapping.h"
 
 int main(int argc, char *argv[]) {
 

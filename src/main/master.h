@@ -5,7 +5,7 @@
 #include "output.h"
 #include "computations.h"
 #include "read_storage.h"
-#include "mapping/mapping.h"
+#include "../mapping/mapping.h"
 
 #include <thread>
 
