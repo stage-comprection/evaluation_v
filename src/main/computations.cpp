@@ -4,7 +4,7 @@
 
 
 // Compares two reads and returns the positions of difference between thoses reads
-void analyze(Triplet& read, Output& output, hash_index& index){
+void analyze(Triplet& t, Output& output, hash_index& index){
 
 //    0 : truePositives
 //    1 : falsePositives
@@ -12,9 +12,11 @@ void analyze(Triplet& read, Output& output, hash_index& index){
 
     int tempOutput[3] {0, 0, 0};
 
-    uint s1 = read.original.size();
+    std::string readSequence;
 
-    if (read.is_filled.all()) {
+    uint s1 = t.original.size();
+
+    if (t.is_filled.all()) {
 
         /* How are values computed:
          * If base is corrected and correction is right (same as reference), true positive
@@ -24,9 +26,9 @@ void analyze(Triplet& read, Output& output, hash_index& index){
 
         for (uint i=0; i < s1; i+=2){
 
-            if (read.original[i] != read.reference[i] or read.original[i+1] != read.reference[i+1]){
+            if (t.original[i] != t.reference[i] or t.original[i+1] != t.reference[i+1]){
 
-                if (read.corrected[i] == read.reference[i] and read.corrected[i+1] == read.reference[i+1]){
+                if (t.corrected[i] == t.reference[i] and t.corrected[i+1] == t.reference[i+1]){
 
                     ++tempOutput[0];
                     ++output.truePositives;
@@ -37,7 +39,7 @@ void analyze(Triplet& read, Output& output, hash_index& index){
                     ++output.falseNegatives;
                 }
 
-            } else if (read.corrected[i] != read.original[i] or read.corrected[i+1] != read.original[i+1]) {
+            } else if (t.corrected[i] != t.original[i] or t.corrected[i+1] != t.original[i+1]) {
 
                 ++tempOutput[1];
                 ++output.falsePositives;
@@ -63,7 +65,7 @@ void analyze(Triplet& read, Output& output, hash_index& index){
 
             if (tempOutput[1] <= tempOutput[2]){
 
-                    if (mapRead(read, 31, index)){
+                    if (mapRead(t, 31, index)){
 
                         ++output.correctedInRef;
 
@@ -79,7 +81,7 @@ void analyze(Triplet& read, Output& output, hash_index& index){
 
     } else {
 
-        if (read.is_filled.any()) {
+        if (t.is_filled.any()) {
 
             ++output.nReadsTotal;
 

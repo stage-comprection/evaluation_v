@@ -17,7 +17,9 @@ bool findRead(const std::string& read, const std::string& reference) {
 
 
 
-bool mapRead(const std::string& read, const uint64_t k, hash_index& index) {
+bool mapRead(Triplet& t, uint64_t k, hash_index& index) {
+
+    std::string read = bin2seq(t.corrected, t.corrected.size());
 
     minimizer kmerS = seq2intStranded((read.substr(0,k)));
     minimizer kmerRC = rc(kmerS,k);
