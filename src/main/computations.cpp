@@ -4,7 +4,7 @@
 
 
 // Compares two reads and returns the positions of difference between thoses reads
-void analyze(Triplet& read, Output& output){
+void analyze(Triplet& read, Output& output, hash_index& index){
 
 //    0 : truePositives
 //    1 : falsePositives
@@ -63,11 +63,11 @@ void analyze(Triplet& read, Output& output){
 
             if (tempOutput[1] <= tempOutput[2]){
 
-//                    if (findSequenceInReference(read.corrected, referenceGenome)){
+                    if (mapRead(read, 31, index)){
 
-//                        ++output.correctedInRef;
+                        ++output.correctedInRef;
 
-//                    };
+                    };
 
             } else {
 

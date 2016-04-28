@@ -2,12 +2,13 @@
 
 #include "output.h"
 #include "read_storage.h"
+#include "../mapping/mapping.h"
 
 #include <vector>
 #include <string>
 #include <unordered_map>
 
-void analyze(Triplet& read, Output& output);
+void analyze(Triplet& read, Output& output, hash_index &index);
 
 void computeGain(Output& output);
 
