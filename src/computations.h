@@ -7,7 +7,7 @@
 #include <string>
 #include <unordered_map>
 
-void analyze(Triplet& read, Output& output, std::vector<std::string>& referenceGenome);
+void analyze(Triplet& read, Output& output);
 
 void computeGain(Output& output);
 

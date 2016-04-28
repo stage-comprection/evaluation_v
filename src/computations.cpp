@@ -4,7 +4,7 @@
 
 
 // Compares two reads and returns the positions of difference between thoses reads
-void analyze(Triplet& read, Output& output, std::vector<std::string>& referenceGenome){
+void analyze(Triplet& read, Output& output){
 
 //    0 : truePositives
 //    1 : falsePositives

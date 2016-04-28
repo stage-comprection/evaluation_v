@@ -2,7 +2,7 @@
 #include "settings.h"
 #include "file_handling.h"
 #include "binary.h"
-
+#include "mapping/mapping.h"
 
 int main(int argc, char *argv[]) {
 
@@ -18,6 +18,8 @@ int main(int argc, char *argv[]) {
         std::string settingsFilePath = argv[1];
 
         std::vector<std::string> settingsVector = readSettingsFile(settingsFilePath);
+
+        std::cout << " - Creating Master" << std::endl;
 
         Master master(settingsVector);
 
@@ -36,6 +38,7 @@ int main(int argc, char *argv[]) {
         std::cout << "Reads rightly corrected : " << master.output.goodCorrection << "\n";
         std::cout << "Reads corrected and found in reference : " << master.output.correctedInRef << "\n";
         std::cout << "Reads wrongly corrected : " << master.output.badCorrection << "\n\n";
+
     }
 
     return 0;

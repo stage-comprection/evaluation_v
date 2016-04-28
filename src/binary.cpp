@@ -82,8 +82,3 @@ read revComp(read& b){
 
     return r;
 }
-
-
-
-
-

@@ -5,6 +5,7 @@
 #include "output.h"
 #include "computations.h"
 #include "read_storage.h"
+#include "mapping/mapping.h"
 
 #include <thread>
 
@@ -13,7 +14,7 @@ class Master {
 
     public:
 
-        std::vector<std::string> referenceGenome;
+        hash_index referenceGenome;
 
         Output output;
 

@@ -1,11 +1,11 @@
 #include "master.h"
 
 // Useless constructor
-Master::Master(std::vector<std::string> settingsVector) : settings { stoi(settingsVector[0]), stoi(settingsVector[1]), settingsVector[2],
+Master::Master(std::vector<std::string> settingsVector) : settings { (uint) stoi(settingsVector[0]), (uint) stoi(settingsVector[1]), settingsVector[2],
 settingsVector[3], settingsVector[4], settingsVector[5], settingsVector[6] }
 {
     // Loads reference genome in memory
-    referenceGenome = loadReferenceGenome(settings.referenceGenomeName);
+    referenceGenome = generateIndex(settings.referenceGenomeName, 31, settings.nThreads);
 }
 
 
@@ -44,13 +44,11 @@ void Master::evaluation() {
         }
     }
 
-
     cleanupTempFiles();
 
     computeGain(output);
 
     writeOutputFile(output, settings.outputFileName);
-
 }
 
 
@@ -66,8 +64,7 @@ void Master::processOneBatch(uint batchNumber){
     for (auto it=reads.cbegin(); it != reads.cend(); ++it){
 
         Triplet r = it->second;
-        analyze(r, output, referenceGenome);
-
+        analyze(r, output);
     }
 
     reads.clear();
