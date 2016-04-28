@@ -68,6 +68,10 @@ void analyze(Triplet& t, Output& output, hash_index& index){
                     if (mapRead(t, 31, index)){
 
                         ++output.correctedInRef;
+                        output.falseNegatives -= tempOutput[2];
+                        output.falsePositives -= tempOutput[1];
+                        output.truePositives += tempOutput[2];
+                        output.truePositives += tempOutput[1];
 
                     };
 
