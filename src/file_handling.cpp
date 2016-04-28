@@ -1,4 +1,5 @@
 #include "file_handling.h"
+#include "binary.h"
 
 // Reads settings from configuration file
 std::vector<std::string> readSettingsFile(const std::string& settingsFilePath){
@@ -100,15 +101,15 @@ void splitReadFile(const std::string& fileName, uint n) {
 
         temp_f = "temp_" + fileName + "_" + std::to_string(i);
         std::ofstream ofile;
-        ofile.open(temp_f);
+        ofile.open(temp_f, std::ios::binary);
         tempFiles.push_back(move(ofile));
-
     }
 
     std::ifstream file;
     file.open(fileName);
 
     std::string line;
+    read r;
     uint readNumber = 0, fileNumber = 0;
 
     while(std::getline(file, line)){
@@ -117,13 +118,16 @@ void splitReadFile(const std::string& fileName, uint n) {
 
             readNumber = stoi(line.substr(1, line.length()));
             fileNumber = readNumber % n;
-            tempFiles[fileNumber] << line << "\n";
 
         } else {
 
-            tempFiles[fileNumber] << line << "\n";
+            r = seq2bin(line, line.size());
+            tempFiles[fileNumber].write((const char*)&readNumber, sizeof(readNumber));
+            tempFiles[fileNumber].write((const char*)&r, sizeof(r));
         }
     }
+
+    for (uint i=0; i<n; ++i) tempFiles[i].close();
 }
 
 
@@ -161,10 +165,10 @@ void writeOutputFile(Output& output, const std::string& fileName) {
     outputFile.open(fileName);
 
     outputFile << "Gain" << "\t" << "TP" << "\t" << "FP" << "\t" << "FN" << "\t" << "SizeDiff" << "\t" << "TotalReads" << "\t" <<
-                  "ProcessedReads" << "GC" << "\t" << "RC" << "\t" << "BC" << "\n";
+                  "ProcessedReads" << "GR" << "\t" << "GC" << "\t" << "RC" << "\t" << "BC" << "\n";
     outputFile << output.gain << "\t" << output.truePositives << "\t" << output.falsePositives << "\t" << output.falseNegatives << "\t"
-               << output.wrongSize << "\t" <<output.nReadsTotal << "\t" << output.nReadsProcessed << "\t" << output.goodCorrection << "\t"
-               << output.correctedInRef << "\t" << output.badCorrection << "\n";
+               << output.wrongSize << "\t" <<output.nReadsTotal << "\t" << output.nReadsProcessed << "\t" << output.goodReads << "\t"
+               << output.goodCorrection << "\t" << output.correctedInRef << "\t" << output.badCorrection << "\n";
 
     outputFile.close();
 
@@ -180,6 +184,7 @@ void writeOutputFile(Output& output, const std::string& fileName) {
     outputFile_hr << "Total number of reads : " << output.nReadsTotal << "\n";
     outputFile_hr << "Reads processed : " << output.nReadsProcessed << "\n";
     outputFile_hr << "Reads with length problem : " << output.wrongSize << "\n";
+    outputFile_hr << "Reads that did not need correction : " << output.goodReads << "\n";
     outputFile_hr << "Reads rightly corrected : " << output.goodCorrection << "\n";
     outputFile_hr << "Reads corrected and found in reference : " << output.correctedInRef << "\n";
     outputFile_hr << "Reads wrongly corrected : " << output.badCorrection << "\n";
@@ -195,79 +200,91 @@ void getReadsFromTempFiles(readMap& reads, const uint n, const Settings& setting
     std::ifstream original, corrected, reference;
 
     std::string fileName = "temp_" + settings.readsFileName + "_" + std::to_string(n);
-    original.open(fileName);
+    original.open(fileName, std::ios::binary);
 
     fileName = "temp_" + settings.correctedFileName + "_" + std::to_string(n);
-    corrected.open(fileName);
+    corrected.open(fileName, std::ios::binary);
 
     fileName = "temp_" + settings.referenceFileName + "_" + std::to_string(n);
-    reference.open(fileName);
+    reference.open(fileName, std::ios::binary);
 
     std::string line;
-    uint readNumber = 0;
+    uint32_t readNumber = 0;
+    read r;
+    Triplet t;
 
-    std::cout << "  - Loading file 1" << std::endl;
+//    std::cout << "  - Loading file 1" << std::endl;
 
     // Fill ReadPair seq_1.
-    while(std::getline(original, line)){
 
-        if (line[0] == '>'){
+    original.seekg(0, std::ios::end);
+    auto end = (int) original.tellg();
+    original.seekg((std::ios::beg));
 
-            readNumber = stoi(line.substr(1));
+    while (original.tellg() < end){
 
-        } else {
-
-            reads[readNumber] = Triplet{line, "", ""};
-        }
+        original.read((char*)&readNumber, sizeof(uint));
+        original.read((char*)&r, sizeof(read));
+        reset(t);
+        t.original = r;
+        t.is_filled.flip(0);
+        reads[readNumber] = t;
     }
 
     readNumber = 0;
 
-    std::cout << "  - Loading file 2" << std::endl;
+//    std::cout << "  - Loading file 2" << std::endl;
 
     // Fill seq_2 (direct access to ReadPair using ID, since ID = position in the vector)
-    while(std::getline(corrected, line)){
 
-        if (line[0] == '>'){
+    corrected.seekg(0, std::ios::end);
+    end = (int) corrected.tellg();
+    corrected.seekg((std::ios::beg));
 
-            readNumber = stoi(line.substr(1));
+    while (corrected.tellg() < end){
+
+        corrected.read((char*)&readNumber, sizeof(uint));
+
+        if ( reads.count(readNumber) > 0 ){
+
+            corrected.read((char*)&r, sizeof(read));
+            reads[readNumber].corrected = r;
+            reads[readNumber].is_filled.flip(1);
 
         } else {
 
-            if ( reads.count(readNumber) > 0 ){
-
-                reads[readNumber].corrected = line;
-
-            } else {
-
-                reads[readNumber] = Triplet{"", line, ""};
-
-            }
-
-
+            reset(t);
+            t.corrected = r;
+            t.is_filled.flip(1);
+            reads[readNumber] = t;
         }
     }
 
-    std::cout << "  - Loading file 3" << std::endl;
+
+//    std::cout << "  - Loading file 3" << std::endl;
 
     // Fill seq_2 (direct access to ReadPair using ID, since ID = position in the vector)
-    while(std::getline(reference, line)){
 
-        if (line[0] == '>'){
+    reference.seekg(0, std::ios::end);
+    end = (int) reference.tellg();
+    reference.seekg((std::ios::beg));
 
-            readNumber = stoi(line.substr(1));
+    while (reference.tellg() < end){
+
+        reference.read((char*)&readNumber, sizeof(uint));
+
+        if ( reads.count(readNumber) > 0 ){
+
+            reference.read((char*)&r, sizeof(read));
+            reads[readNumber].reference = r;
+            reads[readNumber].is_filled.flip(2);
 
         } else {
 
-            if ( reads.count(readNumber) > 0){
-
-                reads[readNumber].reference = line;
-
-            } else {
-
-                reads[readNumber] = Triplet{"", "", line};
-
-            }
+            reset(t);
+            t.reference = r;
+            t.is_filled.flip(2);
+            reads[readNumber] = t;
         }
     }
 
