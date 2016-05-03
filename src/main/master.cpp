@@ -5,7 +5,7 @@ Master::Master(std::vector<std::string> settingsVector) : settings { (uint) stoi
 settingsVector[3], settingsVector[4], settingsVector[5], settingsVector[6] }
 {
     // Loads reference genome in memory
-    referenceGenome = generateIndex(settings.referenceGenomeName, 31, settings.nThreads);
+//    referenceGenome = generateIndex(settings.referenceGenomeName, 31, settings.nThreads);
 }
 
 
