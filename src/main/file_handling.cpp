@@ -297,6 +297,8 @@ void getReadsFromTempFiles(readMap& reads, const uint n, const Settings& setting
 
 void loadFiles(readMap& reads, const Settings& settings) {
 
+    std::cout << "Loading Files" << std::endl;
+
     std::ifstream original, corrected, reference;
 
     original.open(settings.readsFileName);
@@ -380,4 +382,6 @@ void loadFiles(readMap& reads, const Settings& settings) {
     original.close();
     corrected.close();
     reference.close();
+
+    std::cout << " - Files loaded" << std::endl;
 }
