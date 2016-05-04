@@ -208,7 +208,6 @@ void getReadsFromTempFiles(readMap& reads, const uint n, const Settings& setting
     fileName = "temp_" + settings.referenceFileName + "_" + std::to_string(n);
     reference.open(fileName, std::ios::binary);
 
-    std::string line;
     uint32_t readNumber = 0;
     read r;
     Triplet t;
@@ -285,6 +284,96 @@ void getReadsFromTempFiles(readMap& reads, const uint n, const Settings& setting
             t.reference = r;
             t.is_filled.flip(2);
             reads[readNumber] = t;
+        }
+    }
+
+    original.close();
+    corrected.close();
+    reference.close();
+}
+
+
+
+
+void loadFiles(readMap& reads, const Settings& settings) {
+
+    std::ifstream original, corrected, reference;
+
+    original.open(settings.readsFileName);
+    corrected.open(settings.correctedFileName);
+    reference.open(settings.referenceFileName);
+
+    std::string line;
+    uint32_t readNumber = 0;
+    read r;
+    Triplet t;
+
+    while(std::getline(original, line)) {
+
+        if (line[0] == '>'){
+
+            readNumber = stoi(line.substr(1, line.length()));
+
+        } else {
+
+            reset(t);
+            t.original = r;
+            t.is_filled.flip(0);
+            reads[readNumber] = t;
+        }
+    }
+
+    readNumber = 0;
+
+    while(std::getline(corrected, line)){
+
+        if (line[0] == '>') {
+
+            readNumber = stoi(line.substr(1, line.length()));
+
+        } else {
+
+            r = seq2bin(line, line.size());
+
+            if ( reads.count(readNumber) > 0 ){
+
+                reads[readNumber].corrected = r;
+                reads[readNumber].is_filled.flip(1);
+
+            } else {
+
+                reset(t);
+                t.corrected = r;
+                t.is_filled.flip(1);
+                reads[readNumber] = t;
+            }
+        }
+    }
+
+    readNumber = 0;
+
+    while(std::getline(reference, line)){
+
+        if (line[0] == '>'){
+
+            readNumber = stoi(line.substr(1, line.length()));
+
+        } else {
+
+            r = seq2bin(line, line.size());
+
+            if ( reads.count(readNumber) > 0 ){
+
+                reads[readNumber].reference = r;
+                reads[readNumber].is_filled.flip(2);
+
+            } else {
+
+                reset(t);
+                t.reference = r;
+                t.is_filled.flip(2);
+                reads[readNumber] = t;
+            }
         }
     }
 

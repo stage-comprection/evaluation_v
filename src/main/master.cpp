@@ -1,11 +1,14 @@
 #include "master.h"
 
 // Useless constructor
-Master::Master(std::vector<std::string> settingsVector) : settings { (uint) stoi(settingsVector[0]), (uint) stoi(settingsVector[1]), settingsVector[2],
+Master::Master(std::vector<std::string> settingsVector, bool m) : settings { (uint) stoi(settingsVector[0]), (uint) stoi(settingsVector[1]), settingsVector[2],
 settingsVector[3], settingsVector[4], settingsVector[5], settingsVector[6] }
 {
+
+    this->mem = m;
+
     // Loads reference genome in memory
-//    referenceGenome = generateIndex(settings.referenceGenomeName, 31, settings.nThreads);
+    if (mem) referenceGenome = generateIndex(settings.referenceGenomeName, 31, settings.nThreads);
 }
 
 
@@ -14,34 +17,50 @@ settingsVector[3], settingsVector[4], settingsVector[5], settingsVector[6] }
 void Master::evaluation() {
 
     // Gets original, corrected and reference sequences and stores them in temporary files (assigns one thread to each process)
-    std::thread splitOriginal(splitReadFile, settings.readsFileName, settings.nTempFiles);
-    std::thread splitCorrected(splitReadFile, settings.correctedFileName, settings.nTempFiles);
-    std::thread splitReference(splitReadFile, settings.referenceFileName, settings.nTempFiles);
+    if (mem){
 
-    // Synchronizes threads:
-    splitOriginal.join();
-    splitCorrected.join();
-    splitReference.join();
+        std::thread splitOriginal(splitReadFile, settings.readsFileName, settings.nTempFiles);
+        std::thread splitCorrected(splitReadFile, settings.correctedFileName, settings.nTempFiles);
+        std::thread splitReference(splitReadFile, settings.referenceFileName, settings.nTempFiles);
 
-    uint processedBatches = 0;
-    std::vector<std::thread> threads;
+        // Synchronizes threads:
+        splitOriginal.join();
+        splitCorrected.join();
+        splitReference.join();
 
-    while (processedBatches < settings.nTempFiles) {
+        uint processedBatches = 0;
+        std::vector<std::thread> threads;
 
-        threads.resize(0);
+        while (processedBatches < settings.nTempFiles) {
 
-        for (uint i=0; i<settings.nThreads; ++i) {
+            threads.resize(0);
 
-            std::cout << "\nProcessing batch : " << processedBatches << " / " << settings.nTempFiles - 1 << std::endl;
+            for (uint i=0; i<settings.nThreads; ++i) {
 
-            threads.push_back(std::thread(&Master::processOneBatch, this, processedBatches));
-            ++processedBatches;
-            if (processedBatches == settings.nTempFiles) break;
+                std::cout << "\nProcessing batch : " << processedBatches << " / " << settings.nTempFiles - 1 << std::endl;
+
+                threads.push_back(std::thread(&Master::processOneBatch, this, processedBatches));
+                ++processedBatches;
+                if (processedBatches == settings.nTempFiles) break;
+            }
+
+            for(auto &t : threads){
+                 t.join();
+            }
         }
 
-        for(auto &t : threads){
-             t.join();
+    } else {
+
+        readMap reads;
+        loadFiles(reads, settings);
+
+        for (auto it=reads.cbegin(); it != reads.cend(); ++it){
+
+            Triplet r = it->second;
+            analyze(r, output, referenceGenome);
         }
+
+        reads.clear();
     }
 
     cleanupTempFiles();

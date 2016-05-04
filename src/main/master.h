@@ -20,7 +20,9 @@ class Master {
 
         const Settings settings;
 
-        Master(std::vector<std::string> settingsVector);
+        Master(std::vector<std::string> settingsVector, bool m);
+
+        bool mem;
 
         // Loads small read files in memory, compares original/corrected/reference sequences and increments counters accordingly
         void processOneBatch(uint n);

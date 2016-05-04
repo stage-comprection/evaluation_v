@@ -6,9 +6,9 @@
 int main(int argc, char *argv[]) {
 
     // Checks number of arguments
-    if(argc < 2){
+    if(argc < 2 or argc > 4){
 
-        std::cerr << "Usage : ./evaluation_v2 settings_file.ini" << std::endl;
+        std::cerr << "Usage : ./evaluation_v2 settings_file.ini (-mem)" << std::endl;
 
         return -1;
 
@@ -16,11 +16,14 @@ int main(int argc, char *argv[]) {
 
         std::string settingsFilePath = argv[1];
 
+        bool mem = false;
+        if (argc == 3) mem = true;
+
         std::vector<std::string> settingsVector = readSettingsFile(settingsFilePath);
 
         std::cout << " - Creating Master" << std::endl;
 
-        Master master(settingsVector);
+        Master master(settingsVector, mem);
 
         master.evaluation();
 
