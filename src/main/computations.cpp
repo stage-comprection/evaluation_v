@@ -65,15 +65,15 @@ void analyze(Triplet& t, Output& output, hash_index& index){
 
             if (tempOutput[1] <= tempOutput[2]){
 
-//                    if (mapRead(t, 31, index)){
+                    if (mapRead(t, 31, index)){
 
-//                        ++output.correctedInRef;
-//                        output.falseNegatives -= tempOutput[2];
-//                        output.falsePositives -= tempOutput[1];
-//                        output.truePositives += tempOutput[2];
-//                        output.truePositives += tempOutput[1];
+                        ++output.correctedInRef;
+                        output.falseNegatives -= tempOutput[2];
+                        output.falsePositives -= tempOutput[1];
+                        output.truePositives += tempOutput[2];
+                        output.truePositives += tempOutput[1];
 
-//                    };
+                    };
 
             } else {
 

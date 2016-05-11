@@ -8,7 +8,7 @@ settingsVector[3], settingsVector[4], settingsVector[5], settingsVector[6] }
     this->mem = m;
 
     // Loads reference genome in memory
-    if (mem) referenceGenome = generateIndex(settings.referenceGenomeName, 31, settings.nThreads);
+    referenceGenome = generateIndex(settings.referenceGenomeName, 31, settings.nThreads);
 }
 
 
