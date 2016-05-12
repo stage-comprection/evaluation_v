@@ -165,7 +165,7 @@ void writeOutputFile(Output& output, const std::string& fileName) {
     outputFile.open(fileName);
 
     outputFile << "Gain" << "\t" << "TP" << "\t" << "FP" << "\t" << "FN" << "\t" << "SizeDiff" << "\t" << "TotalReads" << "\t" <<
-                  "ProcessedReads" << "GR" << "\t" << "GC" << "\t" << "RC" << "\t" << "BC" << "\n";
+                  "ProcessedReads" << "\t" << "GR" << "\t" << "GC" << "\t" << "RC" << "\t" << "BC" << "\n";
     outputFile << output.gain << "\t" << output.truePositives << "\t" << output.falsePositives << "\t" << output.falseNegatives << "\t"
                << output.wrongSize << "\t" <<output.nReadsTotal << "\t" << output.nReadsProcessed << "\t" << output.goodReads << "\t"
                << output.goodCorrection << "\t" << output.correctedInRef << "\t" << output.badCorrection << "\n";

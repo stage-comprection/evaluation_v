@@ -7,6 +7,8 @@ settingsVector[3], settingsVector[4], settingsVector[5], settingsVector[6] }
 
     this->mem = m;
 
+    this->nextBatchStart = 0;
+
     // Loads reference genome in memory
     referenceGenome = generateIndex(settings.referenceGenomeName, 31, settings.nThreads);
 }
@@ -51,16 +53,22 @@ void Master::evaluation() {
 
     } else {
 
-        readMap reads;
-        loadFiles(reads, settings);
+        loadFiles(this->reads, settings);
+        this->nReads = this->reads.size();
 
-        for (auto it=reads.cbegin(); it != reads.cend(); ++it){
+        std::vector<std::thread> threads;
+        threads.resize(0);
 
-            Triplet r = it->second;
-            analyze(r, output, referenceGenome);
+        for (uint i=0; i<settings.nThreads; ++i) {
+
+            threads.push_back(std::thread(&Master::processBatches, this));
         }
 
-        reads.clear();
+        for(auto &t : threads){
+             t.join();
+        }
+
+        this->reads.clear();
     }
 
     cleanupTempFiles();
@@ -87,4 +95,30 @@ void Master::processOneBatch(uint batchNumber){
     }
 
     reads.clear();
+}
+
+
+
+// Function called in a thread that processes batches of reads.
+void Master::processBatches(){
+
+    while (this->nextBatchStart < this->nReads){
+
+        this->nextBatchStartProtector.lock();
+
+        readMap::const_iterator it = this->reads.cbegin();
+        readMap::const_iterator end = this->reads.cbegin();
+        std::next(it, this->nextBatchStart);
+        std::next(end, this->nextBatchStart + this->batchSize);
+        this->nextBatchStart += this->batchSize;
+
+        this->nextBatchStartProtector.unlock();
+
+        for (; (it != end and it != this->reads.cend()); ++it){
+
+            Triplet r = it->second;
+            analyze(r, this->output, this->referenceGenome);
+        }
+
+    }
 }
