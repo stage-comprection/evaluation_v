@@ -21,6 +21,8 @@ void Master::evaluation() {
     // Gets original, corrected and reference sequences and stores them in temporary files (assigns one thread to each process)
     if (mem){
 
+        std::cout << "Splitting read files" << std::endl;
+
         std::thread splitOriginal(splitReadFile, settings.readsFileName, settings.nTempFiles);
         std::thread splitCorrected(splitReadFile, settings.correctedFileName, settings.nTempFiles);
         std::thread splitReference(splitReadFile, settings.referenceFileName, settings.nTempFiles);
@@ -29,6 +31,8 @@ void Master::evaluation() {
         splitOriginal.join();
         splitCorrected.join();
         splitReference.join();
+
+        std::cout << "Splitting done" << std::endl;
 
         uint processedBatches = 0;
         std::vector<std::thread> threads;
@@ -53,7 +57,12 @@ void Master::evaluation() {
 
     } else {
 
+        std::cout << "Loading files " << std::endl;
+
         loadFiles();
+
+        std::cout << "Files loaded" << std::endl;
+
         this->nReads = this->reads.size();
 
         std::vector<std::thread> threads;
