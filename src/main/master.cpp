@@ -53,7 +53,7 @@ void Master::evaluation() {
 
     } else {
 
-        loadFiles(this->reads, settings);
+        loadFiles();
         this->nReads = this->reads.size();
 
         std::vector<std::thread> threads;
@@ -121,4 +121,177 @@ void Master::processBatches(){
         }
 
     }
+}
+
+
+
+
+void Master::loadOriginalFile() {
+
+    std::cout << "Loading original file ";
+
+    std::ifstream file;
+
+    file.open(this->settings.readsFileName);
+
+    std::string line;
+    uint32_t readNumber = 0;
+    read r;
+    Triplet t;
+
+    while(std::getline(file, line)){
+
+        if (line[0] == '>') {
+
+            readNumber = stoi(line.substr(1, line.length()));
+
+        } else {
+
+            r = seq2bin(line, line.size());
+
+            if ( reads.count(readNumber) > 0 ){
+
+                readsMapProtector.lock();
+
+                reads[readNumber].original = r;
+                reads[readNumber].is_filled.flip(0);
+
+                readsMapProtector.unlock();
+
+            } else {
+
+                reset(t);
+                t.original = r;
+                t.is_filled.flip(0);
+
+                readsMapProtector.lock();
+                reads[readNumber] = t;
+                readsMapProtector.unlock();
+            }
+        }
+    }
+
+    std::cout << " --> Done " << std::endl;
+
+    file.close();
+}
+
+
+
+
+void Master::loadCorrectedFile(){
+
+    std::cout << "Loading corrected file ";
+    std::ifstream file;
+
+    file.open(this->settings.correctedFileName);
+
+    std::string line;
+    uint32_t readNumber = 0;
+    read r;
+    Triplet t;
+
+    while(std::getline(file, line)){
+
+        if (line[0] == '>') {
+
+            readNumber = stoi(line.substr(1, line.length()));
+
+        } else {
+
+            r = seq2bin(line, line.size());
+
+            if ( reads.count(readNumber) > 0 ){
+
+                readsMapProtector.lock();
+
+                reads[readNumber].corrected = r;
+                reads[readNumber].is_filled.flip(1);
+
+                readsMapProtector.unlock();
+
+            } else {
+
+                reset(t);
+                t.corrected = r;
+                t.is_filled.flip(1);
+
+                readsMapProtector.lock();
+                reads[readNumber] = t;
+                readsMapProtector.unlock();
+            }
+        }
+    }
+
+    std::cout << " --> Done " << std::endl;
+
+    file.close();
+}
+
+
+
+
+void Master::loadReferenceFile(){
+
+    std::cout << "Loading reference file ";
+    std::ifstream file;
+
+    file.open(this->settings.referenceFileName);
+
+    std::string line;
+    uint32_t readNumber = 0;
+    read r;
+    Triplet t;
+
+    while(std::getline(file, line)){
+
+        if (line[0] == '>') {
+
+            readNumber = stoi(line.substr(1, line.length()));
+
+        } else {
+
+            r = seq2bin(line, line.size());
+
+            if ( reads.count(readNumber) > 0 ){
+
+                readsMapProtector.lock();
+
+                reads[readNumber].reference = r;
+                reads[readNumber].is_filled.flip(2);
+
+                readsMapProtector.unlock();
+
+            } else {
+
+                reset(t);
+                t.reference = r;
+                t.is_filled.flip(2);
+
+                readsMapProtector.lock();
+                reads[readNumber] = t;
+                readsMapProtector.unlock();
+            }
+        }
+    }
+
+    std::cout << " --> Done " << std::endl;
+
+    file.close();
+}
+
+
+
+
+void Master::loadFiles() {
+
+    std::thread loadOriginal(&Master::loadOriginalFile, this);
+    std::thread loadCorrected(&Master::loadCorrectedFile, this);
+    std::thread loadReference(&Master::loadReferenceFile, this);
+
+    // Synchronizes threads:
+    loadOriginal.join();
+    loadCorrected.join();
+    loadReference.join();
+
 }

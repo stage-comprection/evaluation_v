@@ -27,6 +27,8 @@ class Master {
 
         std::mutex nextBatchStartProtector;
 
+        std::mutex readsMapProtector;
+
         uint nReads;
 
         bool mem;
@@ -39,6 +41,11 @@ class Master {
         void processOneBatch(uint n);
 
         void processBatches();
+
+        void loadOriginalFile();
+        void loadCorrectedFile();
+        void loadReferenceFile();
+        void loadFiles();
 
         // Calculate the gain obtained after correction, using the number of True Positives, False Positives and False Negatives
         void evaluation();

@@ -23,5 +23,3 @@ void cleanupTempFiles();
 void writeOutputFile(Output& output, const std::string& fileName);
 
 void getReadsFromTempFiles(readMap& reads, const uint n, const Settings& settings);
-
-void loadFiles(readMap& reads, const Settings& settings);
