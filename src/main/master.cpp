@@ -86,8 +86,6 @@ void Master::processOneBatch(uint batchNumber){
 
     readMap reads;
 
-    std::cout << "Starting new batch" << std::endl;
-
     getReadsFromTempFiles(reads, batchNumber, settings);
 
     for (auto it=reads.cbegin(); it != reads.cend(); ++it){
@@ -105,6 +103,8 @@ void Master::processOneBatch(uint batchNumber){
 void Master::processBatches(){
 
     while (this->nextBatchStart < this->nReads){
+
+        std::cout << "Starting new batch (nReadsProcessed : " << this->nextBatchStart << ")" << std::endl;
 
         this->nextBatchStartProtector.lock();
 
@@ -130,7 +130,7 @@ void Master::processBatches(){
 
 void Master::loadOriginalFile() {
 
-    std::cout << "Loading original file ";
+    std::cout << "Loading original file " << std::endl;
 
     std::ifstream file;
 
@@ -173,8 +173,6 @@ void Master::loadOriginalFile() {
         }
     }
 
-    std::cout << " --> Done " << std::endl;
-
     file.close();
 }
 
@@ -183,7 +181,7 @@ void Master::loadOriginalFile() {
 
 void Master::loadCorrectedFile(){
 
-    std::cout << "Loading corrected file ";
+    std::cout << "Loading corrected file " << std::endl;
     std::ifstream file;
 
     file.open(this->settings.correctedFileName);
@@ -225,8 +223,6 @@ void Master::loadCorrectedFile(){
         }
     }
 
-    std::cout << " --> Done " << std::endl;
-
     file.close();
 }
 
@@ -235,7 +231,7 @@ void Master::loadCorrectedFile(){
 
 void Master::loadReferenceFile(){
 
-    std::cout << "Loading reference file ";
+    std::cout << "Loading reference file " << std::endl;
     std::ifstream file;
 
     file.open(this->settings.referenceFileName);
@@ -276,8 +272,6 @@ void Master::loadReferenceFile(){
             }
         }
     }
-
-    std::cout << " --> Done " << std::endl;
 
     file.close();
 }
