@@ -104,9 +104,9 @@ void Master::processBatches(){
 
     while (this->nextBatchStart < this->nReads){
 
-        std::cout << "Starting new batch (nReadsProcessed : " << this->nextBatchStart << ")" << std::endl;
 
         this->nextBatchStartProtector.lock();
+        std::cout << "Starting new batch (nReadsProcessed : " << this->nextBatchStart << ")" << std::endl;
 
         readMap::const_iterator it = this->reads.cbegin();
         readMap::const_iterator end = this->reads.cbegin();
