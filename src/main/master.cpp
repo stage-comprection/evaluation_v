@@ -86,6 +86,8 @@ void Master::processOneBatch(uint batchNumber){
 
     readMap reads;
 
+    std::cout << "Starting new batch" << std::endl;
+
     getReadsFromTempFiles(reads, batchNumber, settings);
 
     for (auto it=reads.cbegin(); it != reads.cend(); ++it){
