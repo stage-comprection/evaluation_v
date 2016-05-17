@@ -79,9 +79,15 @@ void Master::evaluation() {
         this->reads.clear();
     }
 
+    std::cout << "Cleaning up temp files..." << std::endl;
+
     cleanupTempFiles();
 
+    std::cout << "Computing gain..." << std::endl;
+
     computeGain(output);
+
+    std::cout << "Generating output files..." << std::endl;
 
     writeOutputFile(output, settings.outputFileName);
 }
@@ -114,7 +120,7 @@ void Master::processBatches(uint i){
 
         this->protector.lock(); // LOCK
 
-        std::cout << "Starting new batch in thread " << i << ". (Reads processed so far : " << this->nextBatchStart / this->nReads << " %)" << std::endl;
+        std::cout << "Starting new batch in thread " << i << ". (Reads processed so far : " << 100*this->nextBatchStart / this->nReads << " %)" << std::endl;
 
         this->protector.unlock(); // UNLOCK
 
