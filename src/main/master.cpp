@@ -120,6 +120,8 @@ void Master::processBatches(){
         this->nextBatchStart += this->batchSize;
         end = std::next(end, this->nextBatchStart);
 
+        std::cout << "It : " << it->first << "End : " << end->first << std::endl;
+
         this->protector.unlock(); // UNLOCK
 
         for (; (it != end and it != this->reads.cend()); ++it){ // it is initialized before, no need to put it in loop declaration.
