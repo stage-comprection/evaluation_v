@@ -115,6 +115,9 @@ void Master::processBatches(){
         readMap::const_iterator it = this->reads.cbegin();
         readMap::const_iterator end = this->reads.cbegin();
 
+        std::cout << " it : " << it->first << " end : " << end->first << std::endl;
+        std::cout << " reads : " << reads.cend()->first << std::endl;
+
         std::next(it, this->nextBatchStart);
         this->nextBatchStart += this->batchSize;
         std::next(end, this->nextBatchStart);
