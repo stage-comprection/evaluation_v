@@ -123,6 +123,8 @@ void Master::processBatches(){
 
         this->nextBatchStartProtector.unlock();
 
+        std::cout << " it : " << it->first << " end : " << end->first << " reads : " << reads.cend()->first << std::endl;
+
         for (; (it != end and it != this->reads.cend()); ++it){ // it is initialized before, no need to put it in loop declaration.
 
             std::cout << "Am I even in T_T" << std::endl;
