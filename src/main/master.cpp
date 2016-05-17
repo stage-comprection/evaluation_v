@@ -64,9 +64,12 @@ void Master::evaluation() {
         std::vector<std::thread> threads;
         threads.resize(0);
 
+        std::cout << "Creating threads :" << std::endl;
+
         for (uint i=0; i<settings.nThreads; ++i) {
 
-            threads.push_back(std::thread(&Master::processBatches, this));
+            std::cout << " - Thread " << i << " created" << std::endl;
+            threads.push_back(std::thread(&Master::processBatches, this, i));
         }
 
         for(auto &t : threads){
@@ -105,16 +108,20 @@ void Master::processOneBatch(uint batchNumber){
 
 
 // Function called in a thread that processes batches of reads.
-void Master::processBatches(){
+void Master::processBatches(uint i){
 
     while (this->nextBatchStart < this->nReads){
 
         this->protector.lock(); // LOCK
 
-        std::cout << "Starting new batch (Reads processed so far : " << this->nextBatchStart / this->nReads << " %)" << std::endl;
+        std::cout << "Starting new batch in thread " << i << ". (Reads processed so far : " << this->nextBatchStart / this->nReads << " %)" << std::endl;
+
+        this->protector.unlock(); // UNLOCK
 
         readMap::iterator it = reads.begin();
         readMap::iterator end = reads.begin();
+
+        this->protector.lock(); // LOCK
 
         it = std::next(it, this->nextBatchStart);
         this->nextBatchStart += this->batchSize;
@@ -136,9 +143,11 @@ void Master::processBatches(){
 
 void Master::loadOriginalFile() {
 
-    this->protector.lock();
+    this->protector.lock(); // LOCK
+
     std::cout << " - Loading original file " << std::endl;
-    this->protector.unlock();
+
+    this->protector.unlock(); // UNLOCK
 
     std::ifstream file;
 
@@ -161,12 +170,12 @@ void Master::loadOriginalFile() {
 
             if ( reads.count(readNumber) > 0 ){
 
-                protector.lock();
+                protector.lock(); // LOCK
 
                 reads[readNumber].original = r;
                 reads[readNumber].is_filled.flip(0);
 
-                protector.unlock();
+                protector.unlock(); // UNLOCK
 
             } else {
 
@@ -174,9 +183,11 @@ void Master::loadOriginalFile() {
                 t.original = r;
                 t.is_filled.flip(0);
 
-                protector.lock();
+                protector.lock(); // LOCK
+
                 reads[readNumber] = t;
-                protector.unlock();
+
+                protector.unlock(); // UNLOCK
             }
         }
     }
@@ -189,9 +200,11 @@ void Master::loadOriginalFile() {
 
 void Master::loadCorrectedFile(){
 
-    this->protector.lock();
+    this->protector.lock(); // LOCK
+
     std::cout << " - Loading corrected file " << std::endl;
-    this->protector.unlock();
+
+    this->protector.unlock(); // UNLOCK
 
     std::ifstream file;
 
@@ -214,12 +227,12 @@ void Master::loadCorrectedFile(){
 
             if ( reads.count(readNumber) > 0 ){
 
-                protector.lock();
+                protector.lock(); // LOCK
 
                 reads[readNumber].corrected = r;
                 reads[readNumber].is_filled.flip(1);
 
-                protector.unlock();
+                protector.unlock(); // UNLOCK
 
             } else {
 
@@ -227,9 +240,11 @@ void Master::loadCorrectedFile(){
                 t.corrected = r;
                 t.is_filled.flip(1);
 
-                protector.lock();
+                protector.lock(); // LOCK
+
                 reads[readNumber] = t;
-                protector.unlock();
+
+                protector.unlock(); // UNLOCK
             }
         }
     }
@@ -242,9 +257,11 @@ void Master::loadCorrectedFile(){
 
 void Master::loadReferenceFile(){
 
-    this->protector.lock();
+    this->protector.lock(); // LOCK
+
     std::cout << " - Loading reference file " << std::endl;
-    this->protector.unlock();
+
+    this->protector.unlock(); // UNLOCK
 
     std::ifstream file;
 
@@ -267,12 +284,12 @@ void Master::loadReferenceFile(){
 
             if ( reads.count(readNumber) > 0 ){
 
-                protector.lock();
+                protector.lock(); // LOCK
 
                 reads[readNumber].reference = r;
                 reads[readNumber].is_filled.flip(2);
 
-                protector.unlock();
+                protector.unlock(); // UNLOCK
 
             } else {
 
@@ -280,9 +297,11 @@ void Master::loadReferenceFile(){
                 t.reference = r;
                 t.is_filled.flip(2);
 
-                protector.lock();
+                protector.lock(); // LOCK
+
                 reads[readNumber] = t;
-                protector.unlock();
+
+                protector.unlock(); // UNLOCK
             }
         }
     }
