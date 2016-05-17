@@ -21,7 +21,7 @@ class Master {
 
         const Settings settings;
 
-        uint batchSize = 1000;
+        uint batchSize = 1000000;
 
         uint64_t nextBatchStart;
 
