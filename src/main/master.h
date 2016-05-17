@@ -25,11 +25,7 @@ class Master {
 
         uint64_t nextBatchStart;
 
-        std::mutex nextBatchStartProtector;
-
-        std::mutex readsMapProtector;
-
-        std::mutex ioProtector;
+        std::mutex protector;
 
         uint nReads;
 

@@ -109,36 +109,20 @@ void Master::processBatches(){
 
     while (this->nextBatchStart < this->nReads){
 
-        this->nextBatchStartProtector.lock();
+        this->protector.lock(); // LOCK
+
         std::cout << "Starting new batch (Reads processed so far : " << this->nextBatchStart / this->nReads << " %)" << std::endl;
 
-//        std::cout << "Normal : " << this->reads.begin()->first << std::endl;
-//        std::cout << "Constant : " << this->reads.cbegin()->first << std::endl;
+        readMap::iterator it = reads.begin();
+        readMap::iterator end = reads.end();
 
-        for (auto i = reads.begin(); i != reads.end(); ++i) std::cout << i->first << std::endl;
-
-        readMap::const_iterator it = this->reads.begin();
-        readMap::const_iterator end = this->reads.begin();
-
-        std::cout << " it : " << it->first << " end : " << end->first << std::endl;
-        std::cout << " reads : " << reads.cend()->first << std::endl;
-
-        std::next(it, this->nextBatchStart);
+        it = std::next(it, this->nextBatchStart);
         this->nextBatchStart += this->batchSize;
-        std::next(end, this->nextBatchStart);
+        end = std::next(end, this->nextBatchStart);
 
-        std::cout << " it : " << it->first << " end : " << end->first << std::endl;
-        std::cout << " reads : " << reads.cend()->first << std::endl;
-
-        std::cout << " - Next batch start : " << this->nextBatchStart << " | Reads Processed : " << this->output.nReadsProcessed << std::endl;
-
-        this->nextBatchStartProtector.unlock();
-
-        std::cout << " it : " << it->first << " end : " << end->first << " reads : " << reads.cend()->first << std::endl;
+        this->protector.unlock(); // UNLOCK
 
         for (; (it != end and it != this->reads.cend()); ++it){ // it is initialized before, no need to put it in loop declaration.
-
-            std::cout << "Am I even in T_T" << std::endl;
 
             Triplet r = it->second;
             analyze(r, this->output, this->referenceGenome);
@@ -152,9 +136,9 @@ void Master::processBatches(){
 
 void Master::loadOriginalFile() {
 
-    this->ioProtector.lock();
+    this->protector.lock();
     std::cout << " - Loading original file " << std::endl;
-    this->ioProtector.unlock();
+    this->protector.unlock();
 
     std::ifstream file;
 
@@ -177,12 +161,12 @@ void Master::loadOriginalFile() {
 
             if ( reads.count(readNumber) > 0 ){
 
-                readsMapProtector.lock();
+                protector.lock();
 
                 reads[readNumber].original = r;
                 reads[readNumber].is_filled.flip(0);
 
-                readsMapProtector.unlock();
+                protector.unlock();
 
             } else {
 
@@ -190,9 +174,9 @@ void Master::loadOriginalFile() {
                 t.original = r;
                 t.is_filled.flip(0);
 
-                readsMapProtector.lock();
+                protector.lock();
                 reads[readNumber] = t;
-                readsMapProtector.unlock();
+                protector.unlock();
             }
         }
     }
@@ -205,9 +189,9 @@ void Master::loadOriginalFile() {
 
 void Master::loadCorrectedFile(){
 
-    this->ioProtector.lock();
+    this->protector.lock();
     std::cout << " - Loading corrected file " << std::endl;
-    this->ioProtector.unlock();
+    this->protector.unlock();
 
     std::ifstream file;
 
@@ -230,12 +214,12 @@ void Master::loadCorrectedFile(){
 
             if ( reads.count(readNumber) > 0 ){
 
-                readsMapProtector.lock();
+                protector.lock();
 
                 reads[readNumber].corrected = r;
                 reads[readNumber].is_filled.flip(1);
 
-                readsMapProtector.unlock();
+                protector.unlock();
 
             } else {
 
@@ -243,9 +227,9 @@ void Master::loadCorrectedFile(){
                 t.corrected = r;
                 t.is_filled.flip(1);
 
-                readsMapProtector.lock();
+                protector.lock();
                 reads[readNumber] = t;
-                readsMapProtector.unlock();
+                protector.unlock();
             }
         }
     }
@@ -258,9 +242,9 @@ void Master::loadCorrectedFile(){
 
 void Master::loadReferenceFile(){
 
-    this->ioProtector.lock();
+    this->protector.lock();
     std::cout << " - Loading reference file " << std::endl;
-    this->ioProtector.unlock();
+    this->protector.unlock();
 
     std::ifstream file;
 
@@ -283,12 +267,12 @@ void Master::loadReferenceFile(){
 
             if ( reads.count(readNumber) > 0 ){
 
-                readsMapProtector.lock();
+                protector.lock();
 
                 reads[readNumber].reference = r;
                 reads[readNumber].is_filled.flip(2);
 
-                readsMapProtector.unlock();
+                protector.unlock();
 
             } else {
 
@@ -296,9 +280,9 @@ void Master::loadReferenceFile(){
                 t.reference = r;
                 t.is_filled.flip(2);
 
-                readsMapProtector.lock();
+                protector.lock();
                 reads[readNumber] = t;
-                readsMapProtector.unlock();
+                protector.unlock();
             }
         }
     }
