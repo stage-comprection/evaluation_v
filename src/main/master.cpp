@@ -137,6 +137,11 @@ void Master::processBatches(uint i){
 
         for (; (it != end and it != this->reads.end()); ++it){ // it is initialized before, no need to put it in loop declaration.
 
+            if (100*this->nextBatchStart / this->nReads > 98){
+
+                std::cout << it->first << std::endl;
+            }
+
             Triplet r = it->second;
             analyze(r, this->output, this->referenceGenome);
         }
