@@ -105,7 +105,7 @@ void Master::processOneBatch(uint batchNumber){
     for (auto it=reads.cbegin(); it != reads.cend(); ++it){
 
         Triplet r = it->second;
-        analyze(r, output, referenceGenome);
+        analyze(r, output, referenceGenome, false);
     }
 
     reads.clear();
