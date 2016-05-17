@@ -38,7 +38,7 @@ class Master {
         // Loads small read files in memory, compares original/corrected/reference sequences and increments counters accordingly
         void processOneBatch(uint n);
 
-        void processBatches();
+        void processBatches(uint i);
 
         void loadOriginalFile();
         void loadCorrectedFile();
