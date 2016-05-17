@@ -135,7 +135,7 @@ void Master::processBatches(uint i){
 
         this->protector.unlock(); // UNLOCK
 
-        for (; (it != end and it != this->reads.cend()); ++it){ // it is initialized before, no need to put it in loop declaration.
+        for (; (it != end and it != this->reads.end()); ++it){ // it is initialized before, no need to put it in loop declaration.
 
             Triplet r = it->second;
             analyze(r, this->output, this->referenceGenome);
