@@ -12,8 +12,6 @@ void analyze(Triplet& t, Output& output, hash_index& index){
 
     int tempOutput[3] {0, 0, 0};
 
-    std::string readSequence;
-
     uint s1 = t.original.size();
 
     if (t.is_filled.all()) {
@@ -65,15 +63,15 @@ void analyze(Triplet& t, Output& output, hash_index& index){
 
             if (tempOutput[1] <= tempOutput[2]){
 
-                    if (mapRead(t, 31, index)){
+//                    if (mapRead(t, 31, index)){
 
-                        ++output.correctedInRef;
-                        output.falseNegatives -= tempOutput[2];
-                        output.falsePositives -= tempOutput[1];
-                        output.truePositives += tempOutput[2];
-                        output.truePositives += tempOutput[1];
+//                        ++output.correctedInRef;
+//                        output.falseNegatives -= tempOutput[2];
+//                        output.falsePositives -= tempOutput[1];
+//                        output.truePositives += tempOutput[2];
+//                        output.truePositives += tempOutput[1];
 
-                    };
+//                    };
 
             } else {
 

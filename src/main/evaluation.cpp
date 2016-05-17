@@ -21,7 +21,7 @@ int main(int argc, char *argv[]) {
 
         std::vector<std::string> settingsVector = readSettingsFile(settingsFilePath);
 
-        std::cout << " - Creating Master" << std::endl;
+        std::cout << "Creating Master" << std::endl;
 
         Master master(settingsVector, mem);
 

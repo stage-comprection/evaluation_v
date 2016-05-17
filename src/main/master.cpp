@@ -10,7 +10,7 @@ settingsVector[3], settingsVector[4], settingsVector[5], settingsVector[6] }
     this->nextBatchStart = 0;
 
     // Loads reference genome in memory
-    referenceGenome = generateIndex(settings.referenceGenomeName, 31, settings.nThreads);
+//    referenceGenome = generateIndex(settings.referenceGenomeName, 31, settings.nThreads);
 }
 
 
@@ -57,11 +57,7 @@ void Master::evaluation() {
 
     } else {
 
-        std::cout << "Loading files " << std::endl;
-
         loadFiles();
-
-        std::cout << "Files loaded" << std::endl;
 
         this->nReads = this->reads.size();
 
@@ -141,7 +137,7 @@ void Master::processBatches(){
 void Master::loadOriginalFile() {
 
     this->ioProtector.lock();
-    std::cout << "Loading original file " << std::endl;
+    std::cout << " - Loading original file " << std::endl;
     this->ioProtector.unlock();
 
     std::ifstream file;
@@ -194,7 +190,7 @@ void Master::loadOriginalFile() {
 void Master::loadCorrectedFile(){
 
     this->ioProtector.lock();
-    std::cout << "Loading corrected file " << std::endl;
+    std::cout << " - Loading corrected file " << std::endl;
     this->ioProtector.unlock();
 
     std::ifstream file;
@@ -247,7 +243,7 @@ void Master::loadCorrectedFile(){
 void Master::loadReferenceFile(){
 
     this->ioProtector.lock();
-    std::cout << "Loading reference file " << std::endl;
+    std::cout << " - Loading reference file " << std::endl;
     this->ioProtector.unlock();
 
     std::ifstream file;
@@ -298,6 +294,8 @@ void Master::loadReferenceFile(){
 
 
 void Master::loadFiles() {
+
+    std::cout << "Loading files " << std::endl;
 
     std::thread loadOriginal(&Master::loadOriginalFile, this);
     std::thread loadCorrected(&Master::loadCorrectedFile, this);
