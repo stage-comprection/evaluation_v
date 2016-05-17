@@ -113,12 +113,18 @@ void Master::processBatches(){
 
         std::cout << "Starting new batch (Reads processed so far : " << this->nextBatchStart / this->nReads << " %)" << std::endl;
 
+        std::cout << "0";
         readMap::iterator it = reads.begin();
+        std::cout << "1";
         readMap::iterator end = reads.end();
+        std::cout << "2";
 
         it = std::next(it, this->nextBatchStart);
+        std::cout << "3";
         this->nextBatchStart += this->batchSize;
+        std::cout << "4";
         end = std::next(end, this->nextBatchStart);
+        std::cout << "5";
 
         std::cout << "It : " << it->first << "End : " << end->first << std::endl;
 
