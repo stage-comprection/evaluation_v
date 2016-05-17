@@ -121,11 +121,11 @@ void Master::processBatches(){
 
         std::cout << " - Next batch start : " << this->nextBatchStart << " | Reads Processed : " << this->output.nReadsProcessed << std::endl;
 
-
-
         this->nextBatchStartProtector.unlock();
 
         for (; (it != end and it != this->reads.cend()); ++it){ // it is initialized before, no need to put it in loop declaration.
+
+            std::cout << "Am I even in T_T" << std::endl;
 
             Triplet r = it->second;
             analyze(r, this->output, this->referenceGenome);
