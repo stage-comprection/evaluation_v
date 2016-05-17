@@ -112,7 +112,7 @@ void Master::processBatches(){
         this->nextBatchStartProtector.lock();
         std::cout << "Starting new batch (Reads processed so far : " << this->nextBatchStart / this->nReads << " %)" << std::endl;
 
-        std::cout << this->reads.begin() << std::endl;
+        std::cout << this->reads.begin()->first << std::endl;
 
         readMap::const_iterator it = this->reads.begin();
         readMap::const_iterator end = this->reads.begin();
