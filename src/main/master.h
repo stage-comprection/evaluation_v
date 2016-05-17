@@ -29,6 +29,8 @@ class Master {
 
         std::mutex readsMapProtector;
 
+        std::mutex ioProtector;
+
         uint nReads;
 
         bool mem;

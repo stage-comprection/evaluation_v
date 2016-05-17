@@ -113,14 +113,15 @@ void Master::processBatches(){
 
     while (this->nextBatchStart < this->nReads){
 
-
         this->nextBatchStartProtector.lock();
-        std::cout << "Starting new batch (Reads processed : " << this->nextBatchStart / this->nReads << " %)" << std::endl;
+        std::cout << "Starting new batch (Reads processed so far : " << this->nextBatchStart / this->nReads << " %)" << std::endl;
 
         readMap::const_iterator it = this->reads.cbegin();
         readMap::const_iterator end = this->reads.cbegin();
+
         std::next(it, this->nextBatchStart);
         std::next(end, this->nextBatchStart + this->batchSize);
+
         this->nextBatchStart += this->batchSize;
 
         this->nextBatchStartProtector.unlock();
@@ -139,7 +140,9 @@ void Master::processBatches(){
 
 void Master::loadOriginalFile() {
 
+    this->ioProtector.lock();
     std::cout << "Loading original file " << std::endl;
+    this->ioProtector.unlock();
 
     std::ifstream file;
 
@@ -190,7 +193,10 @@ void Master::loadOriginalFile() {
 
 void Master::loadCorrectedFile(){
 
+    this->ioProtector.lock();
     std::cout << "Loading corrected file " << std::endl;
+    this->ioProtector.unlock();
+
     std::ifstream file;
 
     file.open(this->settings.correctedFileName);
@@ -240,7 +246,10 @@ void Master::loadCorrectedFile(){
 
 void Master::loadReferenceFile(){
 
+    this->ioProtector.lock();
     std::cout << "Loading reference file " << std::endl;
+    this->ioProtector.unlock();
+
     std::ifstream file;
 
     file.open(this->settings.referenceFileName);
@@ -298,5 +307,8 @@ void Master::loadFiles() {
     loadOriginal.join();
     loadCorrected.join();
     loadReference.join();
+
+    std::cout << "All files loaded. Total reads : " << this->reads.size() << std::endl;
+
 
 }

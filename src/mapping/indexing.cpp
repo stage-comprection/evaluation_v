@@ -2,7 +2,7 @@
 
 hash_index generateIndex(const std::string& refFileName, uint k, uint coreNumber) {
 
-    std::cout << "Indexing reference ..." << std::endl;
+    std::cout << "Generating reference index ..." << std::endl;
 
     std::ifstream refFile;
     refFile.open(refFileName);
@@ -19,6 +19,8 @@ hash_index generateIndex(const std::string& refFileName, uint k, uint coreNumber
     minimizer kmerS(seq2intStranded((seq.substr(0, k))));
     minimizer kmerRC(rc(kmerS, k));
     minimizer kmer(std::min(kmerRC, kmerS));
+
+    std::cout << " - Indexing Kmers" << std::endl;
 
     bool end(false);
 
@@ -52,7 +54,7 @@ hash_index generateIndex(const std::string& refFileName, uint k, uint coreNumber
 
     } while(!end);
 
-    std::cout << "Kmers indexed, starting hashing ..." << std::endl;
+    std::cout << " - " << kmerIndexed.size() << " kmers indexed. Hashing kmers ..." << std::endl;
 
     auto data_iterator = boomphf::range(static_cast<const uint64_t*>(&((kmerIndexed)[0])), static_cast<const uint64_t*>(&((kmerIndexed)[0]))+kmerIndexed.size());
     kmer2Indice = boomphf::mphf<uint64_t, hasher>(kmerIndexed.size(), data_iterator, coreNumber, 10, false);
@@ -96,7 +98,8 @@ hash_index generateIndex(const std::string& refFileName, uint k, uint coreNumber
 
     } while(!end);
 
-    std::cout << "Indexing done" << std::endl;
+    std::cout << " - " << indice2Positions.size() << " kmers hashed." << std::endl;
+    std::cout << "Indexing done." << std::endl;
 
     return hash_index {seq, kmer2Indice, indice2Positions};
 
