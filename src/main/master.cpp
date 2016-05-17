@@ -116,7 +116,7 @@ void Master::processBatches(){
         std::cout << "0" << std::endl;
         readMap::iterator it = reads.begin();
         std::cout << "1"<< std::endl;
-        readMap::iterator end = reads.end();
+        readMap::iterator end = reads.begin();
         std::cout << "2"<< std::endl;
 
         it = std::next(it, this->nextBatchStart);
