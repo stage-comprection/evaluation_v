@@ -4,7 +4,7 @@
 
 
 // Compares two reads and returns the positions of difference between thoses reads
-void analyze(Triplet& t, Output& output, hash_index& index){
+void analyze(Triplet& t, Output& output, hash_index& index, bool print){
 
 //    0 : truePositives
 //    1 : falsePositives
@@ -14,6 +14,8 @@ void analyze(Triplet& t, Output& output, hash_index& index){
 
     uint s1 = t.original.size();
 
+    std::cout << "0" << std::endl;
+
     if (t.is_filled.all()) {
 
         /* How are values computed:
@@ -21,6 +23,8 @@ void analyze(Triplet& t, Output& output, hash_index& index){
          * If base is corrected but correction is wrong (not the reference), false positive
          * If base is not corrected but original is different from reference, false negative
          */
+
+        std::cout << "1a" << std::endl;
 
         for (uint i=0; i < s1; i+=2){
 
@@ -44,6 +48,8 @@ void analyze(Triplet& t, Output& output, hash_index& index){
             }
         }
 
+        std::cout << "1b" << std::endl;
+
         ++output.nReadsProcessed;
         ++output.nReadsTotal;
 
@@ -53,15 +59,21 @@ void analyze(Triplet& t, Output& output, hash_index& index){
 
                 ++output.goodCorrection;
 
+                std::cout << "1c1a" << std::endl;
+
             } else {
 
                 ++output.goodReads;
+
+                std::cout << "1c1b" << std::endl;
 
             }
 
         } else {
 
             if (tempOutput[1] <= tempOutput[2]){
+
+                std::cout << "1c2a" << std::endl;
 
 //                    if (mapRead(t, 31, index)){
 
@@ -75,6 +87,8 @@ void analyze(Triplet& t, Output& output, hash_index& index){
 
             } else {
 
+                std::cout << "1c2b" << std::endl;
+
                 ++output.badCorrection;
 
             }
@@ -85,8 +99,13 @@ void analyze(Triplet& t, Output& output, hash_index& index){
 
         if (t.is_filled.any()) {
 
+            std::cout << "2a1" << std::endl;
+
             ++output.nReadsTotal;
 
+        } else {
+
+            std::cout << "2a2" << std::endl;
         }
     }
 }

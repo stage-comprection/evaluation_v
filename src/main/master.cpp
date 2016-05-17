@@ -135,15 +135,20 @@ void Master::processBatches(uint i){
 
         this->protector.unlock(); // UNLOCK
 
+        bool print = false;
+
         for (; (it != end and it != this->reads.end()); ++it){ // it is initialized before, no need to put it in loop declaration.
 
-            if (100*this->nextBatchStart / this->nReads > 98){
+            if (it->first>36419478){
 
-                std::cout << it->first << std::endl;
+                print = true;
             }
 
             Triplet r = it->second;
-            analyze(r, this->output, this->referenceGenome);
+
+            this->protector.lock();
+            analyze(r, this->output, this->referenceGenome, print);
+            this->protector.unlock();
         }
 
     }
