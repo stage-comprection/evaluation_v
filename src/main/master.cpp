@@ -10,7 +10,7 @@ settingsVector[3], settingsVector[4], settingsVector[5], settingsVector[6] }
     this->nextBatchStart = 0;
 
     // Loads reference genome in memory
-    referenceGenome = generateIndex(settings.referenceGenomeName, 31, settings.nThreads);
+//    referenceGenome = generateIndex(settings.referenceGenomeName, 31, settings.nThreads);
 }
 
 
