@@ -115,7 +115,7 @@ void Master::processBatches(){
 //        std::cout << "Normal : " << this->reads.begin()->first << std::endl;
 //        std::cout << "Constant : " << this->reads.cbegin()->first << std::endl;
 
-        for (auto i = reads.begin(); i != reads.end(); ++i) std::cout << i->second << std::endl;
+        for (auto i = reads.begin(); i != reads.end(); ++i) std::cout << i->first << std::endl;
 
         readMap::const_iterator it = this->reads.begin();
         readMap::const_iterator end = this->reads.begin();
