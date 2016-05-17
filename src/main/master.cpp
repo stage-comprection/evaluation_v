@@ -116,11 +116,12 @@ void Master::processBatches(){
         readMap::const_iterator end = this->reads.cbegin();
 
         std::next(it, this->nextBatchStart);
-        std::next(end, this->nextBatchStart + this->batchSize);
+        this->nextBatchStart += this->batchSize;
+        std::next(end, this->nextBatchStart);
 
         std::cout << " - Next batch start : " << this->nextBatchStart << " | Reads Processed : " << this->output.nReadsProcessed << std::endl;
 
-        this->nextBatchStart += this->batchSize;
+
 
         this->nextBatchStartProtector.unlock();
 
