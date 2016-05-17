@@ -10,15 +10,11 @@ void analyze(Triplet& t, Output& output, hash_index& index){
 //    1 : falsePositives
 //    2 : falseNegatives
 
-    std::cout << "Start evaluation : ";
-
     int tempOutput[3] {0, 0, 0};
 
     uint s1 = t.original.size();
 
     if (t.is_filled.all()) {
-
-        std::cout << "all filled." << std::endl;
 
         /* How are values computed:
          * If base is corrected and correction is right (same as reference), true positive
@@ -88,8 +84,6 @@ void analyze(Triplet& t, Output& output, hash_index& index){
     } else {
 
         if (t.is_filled.any()) {
-
-            std::cout << "only some filled." << std::endl;
 
             ++output.nReadsTotal;
 
