@@ -105,7 +105,7 @@ void Master::processOneBatch(uint batchNumber){
     for (auto it=reads.cbegin(); it != reads.cend(); ++it){
 
         Triplet r = it->second;
-        analyze(r, output, referenceGenome, false);
+        analyze(r, output, referenceGenome);
     }
 
     reads.clear();
@@ -157,14 +157,12 @@ void Master::processBatches(uint i){
 
         this->protector.unlock(); // UNLOCK
 
-        bool print = false;
-
         for (; (it != end); ++it){ // it is initialized before, no need to put it in loop declaration.
 
             Triplet r = it->second;
 
             this->protector.lock();
-            analyze(r, this->output, this->referenceGenome, print);
+            analyze(r, this->output, this->referenceGenome);
             this->protector.unlock();
         }
 

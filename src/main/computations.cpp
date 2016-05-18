@@ -4,7 +4,7 @@
 
 
 // Compares two reads and returns the positions of difference between thoses reads
-void analyze(Triplet& t, Output& output, hash_index& index, bool print){
+void analyze(Triplet& t, Output& output, hash_index& index){
 
 //    0 : truePositives
 //    1 : falsePositives

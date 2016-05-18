@@ -7,7 +7,7 @@
 #include <string>
 #include <unordered_map>
 
-void analyze(Triplet& t, Output& output, hash_index &index, bool print);
+void analyze(Triplet& t, Output& output, hash_index &index);
 
 void computeGain(Output& output);
 
