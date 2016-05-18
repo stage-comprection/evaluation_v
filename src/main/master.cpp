@@ -132,13 +132,22 @@ void Master::processBatches(uint i){
 
         it = std::next(it, this->nextBatchStart);
         this->nextBatchStart += this->batchSize;
-        end = std::next(end, this->nextBatchStart);
+
+        if (this->nextBatchStart > this->reads.end()->first){
+
+            end = this->reads.end();
+
+        } else {
+
+            end = std::next(end, this->nextBatchStart);
+
+        }
 
         this->protector.unlock(); // UNLOCK
 
         bool print = false;
 
-        for (; (it != end and it != this->reads.end()); ++it){ // it is initialized before, no need to put it in loop declaration.
+        for (; (it != end); ++it){ // it is initialized before, no need to put it in loop declaration.
 
             if (100*this->nextBatchStart / this->nReads > 98){
 
