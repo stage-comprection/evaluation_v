@@ -161,12 +161,6 @@ void Master::processBatches(uint i){
 
         for (; (it != end); ++it){ // it is initialized before, no need to put it in loop declaration.
 
-            if (100*this->nextBatchStart / this->nReads > 98){
-
-                print = true;
-                std::cout << it->first << std::endl;
-            }
-
             Triplet r = it->second;
 
             this->protector.lock();
