@@ -121,7 +121,7 @@ void Master::processBatches(uint i){
         this->protector.lock(); // LOCK
 
         std::cout << "Starting new batch in thread " << i << ". (Reads processed so far : " << 100*this->nextBatchStart / this->nReads << " %)" << std::endl;
-        std::cout << " - Next batch start : " << this->nextBatchStart << " | nReads : " << this->nReads << " | nReadsProcessed " << this->output.nReadsProcessed << std::endl;
+        std::cout << " - Next batch start : " << this->nextBatchStart << " | nReads : " << this->nReads << " | nReadsProcessed " << this->output.nReadsProcessed << " | nReadsTotal " << this->output.nReadsTotal << std::endl;
 
         this->protector.unlock(); // UNLOCK
 
