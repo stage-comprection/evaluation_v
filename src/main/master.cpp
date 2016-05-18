@@ -144,6 +144,8 @@ void Master::processBatches(uint i){
 
             end = std::prev(this->reads.end());
 
+            std::cout << "1b" << std::endl;
+
         } else {
 
             std::cout << "2" << std::endl;
