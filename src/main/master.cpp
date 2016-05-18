@@ -135,6 +135,7 @@ void Master::processBatches(uint i){
 
         std::cout << "NextBatchStart : " << this->nextBatchStart << std::endl;
         std::cout << "nReads : " << this->nReads << std::endl;
+        std::cout << "Begin : " << it->first << std::endl;
         std::cout << "End : " << end->first << std::endl;
 
         if (this->nextBatchStart > this->nReads - 2){
@@ -153,11 +154,12 @@ void Master::processBatches(uint i){
 
         std::cout << "NextBatchStart : " << this->nextBatchStart << std::endl;
         std::cout << "nReads : " << this->nReads << std::endl;
-        std::cout << "End : " << end->first << std::endl;
+        std::cout << "Begin : " << it->first << std::endl;
+        std::cout << "End : " << std::prev(end)->first << std::endl;
 
         this->protector.unlock(); // UNLOCK
 
-        for (; (it != end); ++it){ // it is initialized before, no need to put it in loop declaration.
+        for (; (it != end); ++it){ // iterator is initialized before, no need to put it in loop declaration.
 
             Triplet r = it->second;
 
@@ -165,6 +167,8 @@ void Master::processBatches(uint i){
             analyze(r, this->output, this->referenceGenome);
             this->protector.unlock();
         }
+
+        std::cout << std::endl << std::endl;
 
     }
 }
