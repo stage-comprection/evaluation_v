@@ -143,6 +143,8 @@ void Master::processBatches(uint i){
 
         }
 
+        std::cout << "NextBatchStart : " << this->nextBatchStart << " | ReadsEnd : " << this->reads.end()->first << " | End : " << end->first << std::endl;
+
         this->protector.unlock(); // UNLOCK
 
         bool print = false;
