@@ -137,17 +137,23 @@ void Master::processBatches(uint i){
         std::cout << "nReads : " << this->nReads << std::endl;
         std::cout << "End : " << end->first << std::endl;
 
-        if (this->nextBatchStart > this->nReads - 1){
+        if (this->nextBatchStart > this->nReads - 2){
+
+            std::cout << "1" << std::endl;
 
             end = this->reads.end();
 
         } else {
 
+            std::cout << "2" << std::endl;
+
             end = std::next(end, this->nextBatchStart);
 
         }
 
-        std::cout << "NextBatchStart : " << this->nextBatchStart << " | ReadsEnd : " << this->reads.end()->first << " | End : " << end->first << std::endl;
+        std::cout << "NextBatchStart : " << this->nextBatchStart << std::endl;
+        std::cout << "nReads : " << this->nReads << std::endl;
+        std::cout << "End : " << end->first << std::endl;
 
         this->protector.unlock(); // UNLOCK
 
