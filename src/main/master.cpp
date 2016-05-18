@@ -139,9 +139,10 @@ void Master::processBatches(uint i){
 
         for (; (it != end and it != this->reads.end()); ++it){ // it is initialized before, no need to put it in loop declaration.
 
-            if (it->first>36419478){
+            if (100*this->nextBatchStart / this->nReads > 98){
 
                 print = true;
+                std::cout << it->first << std::endl;
             }
 
             Triplet r = it->second;
