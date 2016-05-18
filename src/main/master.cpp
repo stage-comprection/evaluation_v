@@ -134,10 +134,10 @@ void Master::processBatches(uint i){
         this->nextBatchStart += this->batchSize;
 
         std::cout << "NextBatchStart : " << this->nextBatchStart << std::endl;
-        std::cout << "ReadsEnd : " << (this->reads.end()--)->first << std::endl;
+        std::cout << "nReads : " << this->nReads << std::endl;
         std::cout << "End : " << end->first << std::endl;
 
-        if (this->nextBatchStart > (this->reads.end()--)->first){
+        if (this->nextBatchStart > this->nReads - 1){
 
             end = this->reads.end();
 
