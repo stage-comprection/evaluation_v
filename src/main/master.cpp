@@ -142,7 +142,7 @@ void Master::processBatches(uint i){
 
             std::cout << "1" << std::endl;
 
-            end = this->reads.end();
+            end = std::prev(this->reads.end());
 
         } else {
 
@@ -155,11 +155,11 @@ void Master::processBatches(uint i){
         std::cout << "NextBatchStart : " << this->nextBatchStart << std::endl;
         std::cout << "nReads : " << this->nReads << std::endl;
         std::cout << "Begin : " << it->first << std::endl;
-        std::cout << "End : " << std::prev(end)->first << std::endl;
+        std::cout << "End : " << end->first << std::endl;
 
         this->protector.unlock(); // UNLOCK
 
-        for (; (it != end); ++it){ // iterator is initialized before, no need to put it in loop declaration.
+        for (; (it != std::next(end)); ++it){ // iterator is initialized before, no need to put it in loop declaration.
 
             Triplet r = it->second;
 
