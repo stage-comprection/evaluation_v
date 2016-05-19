@@ -46,7 +46,7 @@ void analyze(Triplet& t, Output& output, hash_index& index){
             }
         }
 
-        std::endl;
+        std::cout << std::endl;
 
         ++output.nReadsProcessed;
         ++output.nReadsTotal;
