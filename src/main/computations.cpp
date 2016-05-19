@@ -24,22 +24,14 @@ void analyze(Triplet& t, Output& output, hash_index& index){
 
         for (uint i=0; i < s1; i+=2){
 
-            std::cout << t.original[i] << t.original[i+1] << " | " << t.reference[i] << t.reference[i+1] << " | " << t.corrected[i] << t.corrected[i+1];
-
             if (t.original[i] != t.reference[i] or t.original[i+1] != t.reference[i+1]){
 
-                std::cout << " | ref != original";
-
                 if (t.corrected[i] == t.reference[i] and t.corrected[i+1] == t.reference[i+1]){
-
-                    std::cout << " | cor = original" << std::endl;
 
                     ++tempOutput[0];
                     ++output.truePositives;
 
                 } else {
-
-                    std::cout << " | cor != original" << std::endl;
 
                     ++tempOutput[2];
                     ++output.falseNegatives;
@@ -47,14 +39,11 @@ void analyze(Triplet& t, Output& output, hash_index& index){
 
             } else if (t.corrected[i] != t.original[i] or t.corrected[i+1] != t.original[i+1]) {
 
-                std::cout << " ref = original | cor != original" << std::endl;
-
                 ++tempOutput[1];
                 ++output.falsePositives;
 
             } else {
 
-                std::cout << " ref = original | cor = original" << std::endl;
             }
         }
 
@@ -79,15 +68,15 @@ void analyze(Triplet& t, Output& output, hash_index& index){
 
             if (tempOutput[1] <= tempOutput[2]){
 
-//                    if (mapRead(t, 31, index)){
+                    if (mapRead(t, 31, index)){
 
-//                        ++output.correctedInRef;
-//                        output.falseNegatives -= tempOutput[2];
-//                        output.falsePositives -= tempOutput[1];
-//                        output.truePositives += tempOutput[2];
-//                        output.truePositives += tempOutput[1];
+                        ++output.correctedInRef;
+                        output.falseNegatives -= tempOutput[2];
+                        output.falsePositives -= tempOutput[1];
+                        output.truePositives += tempOutput[2];
+                        output.truePositives += tempOutput[1];
 
-//                    };
+                    };
 
             } else {
 
