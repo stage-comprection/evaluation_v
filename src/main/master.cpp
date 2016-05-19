@@ -120,8 +120,7 @@ void Master::processBatches(uint i){
 
         this->protector.lock(); // LOCK
 
-        std::cout << "Starting new batch in thread " << i << ". (Reads processed so far : " << 100*this->nextBatchStart / this->nReads << " %)" << std::endl;
-        std::cout << " - Next batch start : " << this->nextBatchStart << " | nReads : " << this->nReads << " | nReadsProcessed " << this->output.nReadsProcessed << " | nReadsTotal " << this->output.nReadsTotal << std::endl;
+        std::cout << "Starting new batch in thread " << i << " (Progress : " << 100*this->nextBatchStart / this->nReads << " %)." << std::endl;
 
         this->protector.unlock(); // UNLOCK
 
@@ -133,31 +132,15 @@ void Master::processBatches(uint i){
         it = std::next(it, this->nextBatchStart);
         this->nextBatchStart += this->batchSize;
 
-        std::cout << "NextBatchStart : " << this->nextBatchStart << std::endl;
-        std::cout << "nReads : " << this->nReads << std::endl;
-        std::cout << "Begin : " << it->first << std::endl;
-        std::cout << "End : " << end->first << std::endl;
-
         if (this->nextBatchStart > this->nReads - 2){
-
-            std::cout << "1" << std::endl;
 
             end = std::next(end, this->reads.size()-1);
 
-            std::cout << "1b" << std::endl;
-
         } else {
-
-            std::cout << "2" << std::endl;
 
             end = std::next(end, this->nextBatchStart);
 
         }
-
-        std::cout << "NextBatchStart : " << this->nextBatchStart << std::endl;
-        std::cout << "nReads : " << this->nReads << std::endl;
-        std::cout << "Begin : " << it->first << std::endl;
-        std::cout << "End : " << end->first << std::endl;
 
         this->protector.unlock(); // UNLOCK
 
@@ -169,8 +152,6 @@ void Master::processBatches(uint i){
             analyze(r, this->output, this->referenceGenome);
             this->protector.unlock();
         }
-
-        std::cout << std::endl << std::endl;
 
     }
 }
