@@ -24,6 +24,8 @@ void analyze(Triplet& t, Output& output, hash_index& index){
 
         for (uint i=0; i < s1; i+=2){
 
+            std::cout << t.original[i] << t.original[i+1] << " | " << t.reference[i] << t.reference[i+1] << " | " << t.corrected[i] << t.corrected[i+1] << std::endl;
+
             if (t.original[i] != t.reference[i] or t.original[i+1] != t.reference[i+1]){
 
                 if (t.corrected[i] == t.reference[i] and t.corrected[i+1] == t.reference[i+1]){
@@ -43,6 +45,8 @@ void analyze(Triplet& t, Output& output, hash_index& index){
                 ++output.falsePositives;
             }
         }
+
+        std::endl;
 
         ++output.nReadsProcessed;
         ++output.nReadsTotal;
