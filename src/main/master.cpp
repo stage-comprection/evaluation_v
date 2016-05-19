@@ -115,6 +115,8 @@ void Master::processOneBatch(uint batchNumber){
 // Function called in a thread that processes batches of reads.
 void Master::processBatches(uint i){
 
+    Output o;
+
     while (this->nextBatchStart < this->nReads){
 
         this->protector.lock(); // LOCK
@@ -147,12 +149,20 @@ void Master::processBatches(uint i){
 
             Triplet r = it->second;
 
-            this->protector.lock();
-            analyze(r, this->output, this->referenceGenome);
-            this->protector.unlock();
+            analyze(r, o, this->referenceGenome);
         }
-
     }
+
+    this->output.truePositives = o.truePositives;
+    this->output.falsePositives = o.falsePositives;
+    this->output.falseNegatives = o.falseNegatives;
+    this->output.wrongSize = o.wrongSize;
+    this->output.nReadsProcessed = o.nReadsProcessed;
+    this->output.nReadsTotal = o.nReadsTotal;
+    this->output.goodReads = o.goodReads;
+    this->output.goodCorrection = o.goodCorrection;
+    this->output.correctedInRef = o.correctedInRef;
+    this->output.badCorrection = o.badCorrection;
 }
 
 

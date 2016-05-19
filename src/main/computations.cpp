@@ -68,8 +68,6 @@ void analyze(Triplet& t, Output& output, hash_index& index){
 
                     if (mapRead(t, 31, index)){
 
-                        std::cout << "Lookup in ref" << std::endl;
-
                         ++output.correctedInRef;
                         output.falseNegatives -= tempOutput[2];
                         output.falsePositives -= tempOutput[1];
