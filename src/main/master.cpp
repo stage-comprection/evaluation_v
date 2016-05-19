@@ -64,11 +64,10 @@ void Master::evaluation() {
         std::vector<std::thread> threads;
         threads.resize(0);
 
-        std::cout << "Creating threads :" << std::endl;
+        std::cout << "Analyzing reads ... " << std::endl;
 
         for (uint i=0; i<settings.nThreads; ++i) {
 
-            std::cout << " - Thread " << i << " created" << std::endl;
             threads.push_back(std::thread(&Master::processBatches, this, i));
         }
 
