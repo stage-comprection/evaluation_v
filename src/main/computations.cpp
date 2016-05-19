@@ -28,18 +28,26 @@ void analyze(Triplet& t, Output& output, hash_index& index){
 
             if (t.original[i] != t.reference[i] or t.original[i+1] != t.reference[i+1]){
 
+                std::cout << " | ref != original";
+
                 if (t.corrected[i] == t.reference[i] and t.corrected[i+1] == t.reference[i+1]){
+
+                    std::cout << " | cor = original";
 
                     ++tempOutput[0];
                     ++output.truePositives;
 
                 } else {
 
+                    std::cout << " | cor != original";
+
                     ++tempOutput[2];
                     ++output.falseNegatives;
                 }
 
             } else if (t.corrected[i] != t.original[i] or t.corrected[i+1] != t.original[i+1]) {
+
+                std::cout << " ref = original | cor != original";
 
                 ++tempOutput[1];
                 ++output.falsePositives;
