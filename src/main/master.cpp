@@ -147,7 +147,7 @@ void Master::processBatches(uint i){
 
             Triplet r = it->second;
 
-            analyze(r, o, this->referenceGenome);
+            analyze(r, this->output, this->referenceGenome);
         }
     }
 
