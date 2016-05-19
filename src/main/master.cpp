@@ -115,18 +115,16 @@ void Master::processOneBatch(uint batchNumber){
 // Function called in a thread that processes batches of reads.
 void Master::processBatches(uint i){
 
-    while (this->nextBatchStart < this->nReads){
+    while (true){
 
         this->protector.lock(); // LOCK
+
+        if(this->nextBatchStart < this->nReads) exit(0);
 
         std::cout << "Starting new batch in thread " << i << " (Progress : " << 100*this->nextBatchStart / this->nReads << " %)." << std::endl;
 
-        this->protector.unlock(); // UNLOCK
-
         readMap::iterator it = reads.begin();
         readMap::iterator end = reads.begin();
-
-        this->protector.lock(); // LOCK
 
         it = std::next(it, this->nextBatchStart);
         this->nextBatchStart += this->batchSize;
