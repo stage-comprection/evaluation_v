@@ -119,8 +119,11 @@ void Master::processBatches(uint i){
 
         this->protector.lock(); // LOCK
 
-        if(this->nextBatchStart > this->nReads) return;
-
+        if(this->nextBatchStart > this->nReads){
+            std::cout << "I'm out !" << std::endl;
+            this->protector.unlock();
+            return;
+        }
         std::cout << "Starting new batch in thread " << i << " (Progress : " << 100*this->nextBatchStart / this->nReads << " %)." << std::endl;
 
         readMap::iterator it = reads.begin();
