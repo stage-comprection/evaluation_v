@@ -119,7 +119,7 @@ void Master::processBatches(uint i){
 
         this->protector.lock(); // LOCK
 
-        if(this->nextBatchStart > this->nReads) break;
+        if(this->nextBatchStart > this->nReads) return;
 
         std::cout << "Starting new batch in thread " << i << " (Progress : " << 100*this->nextBatchStart / this->nReads << " %)." << std::endl;
 
