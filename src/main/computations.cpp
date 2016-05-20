@@ -31,10 +31,14 @@ void analyze(Triplet& t, Output& output, hash_index& index){
                     ++tempOutput[0];
                     ++output.truePositives;
 
+                    std::cout << "TP" << std::endl;
+
                 } else {
 
                     ++tempOutput[2];
                     ++output.falseNegatives;
+
+                    std::cout << "FN" << std::endl;
                 }
 
             } else if (t.corrected[i] != t.original[i] or t.corrected[i+1] != t.original[i+1]) {
@@ -42,10 +46,14 @@ void analyze(Triplet& t, Output& output, hash_index& index){
                 ++tempOutput[1];
                 ++output.falsePositives;
 
+                std::cout << "FP" << std::endl;
+
             } else {
 
             }
         }
+
+        std::cout << tempOutput[0] << " | " << tempOutput[1] << " | " << tempOutput[2] << std::endl;
 
         ++output.nReadsProcessed;
         ++output.nReadsTotal;
@@ -66,15 +74,15 @@ void analyze(Triplet& t, Output& output, hash_index& index){
 
             if (tempOutput[1] <= tempOutput[2]){
 
-                    if (mapRead(t, 31, index)){
+//                    if (mapRead(t, 31, index)){
 
-                        ++output.correctedInRef;
-                        output.falseNegatives -= tempOutput[2];
-                        output.falsePositives -= tempOutput[1];
-                        output.truePositives += tempOutput[2];
-                        output.truePositives += tempOutput[1];
+//                        ++output.correctedInRef;
+//                        output.falseNegatives -= tempOutput[2];
+//                        output.falsePositives -= tempOutput[1];
+//                        output.truePositives += tempOutput[2];
+//                        output.truePositives += tempOutput[1];
 
-                    };
+//                    };
 
             } else {
 
