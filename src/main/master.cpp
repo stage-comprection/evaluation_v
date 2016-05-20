@@ -57,6 +57,10 @@ void Master::evaluation() {
 
     } else {
 
+        std::cout << "Reads file : " << settings.readsFileName << std::endl;
+        std::cout << "Corrected reads file : " << settings.correctedFileName << std::endl;
+        std::cout << "Reference file : " << settings.referenceFileName << std::endl;
+
         loadFiles();
 
         this->nReads = this->reads.size();

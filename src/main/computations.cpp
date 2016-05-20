@@ -24,9 +24,9 @@ void analyze(Triplet& t, Output& output, hash_index& index){
 
         for (uint i=0; i < s1; i+=2){
 
-            std::cout << t.original[i] << t.original[i+1] <<
-                         t.corrected[i] << t.corrected[i+1] <<
-                         t.reference[i] << t.reference[i+1] << std::endl;
+//            std::cout << t.original[i] << t.original[i+1] <<
+//                         t.corrected[i] << t.corrected[i+1] <<
+//                         t.reference[i] << t.reference[i+1] << std::endl;
 
             if (t.original[i] != t.reference[i] or t.original[i+1] != t.reference[i+1]){
 
@@ -34,14 +34,11 @@ void analyze(Triplet& t, Output& output, hash_index& index){
 
                     ++tempOutput[0];
                     ++output.truePositives;
-                    std::cout << "TP" << std::endl;
 
                 } else {
 
                     ++tempOutput[2];
                     ++output.falseNegatives;
-
-                    std::cout << "FN" << std::endl;
                 }
 
             } else if (t.corrected[i] != t.original[i] or t.corrected[i+1] != t.original[i+1]) {
@@ -49,14 +46,10 @@ void analyze(Triplet& t, Output& output, hash_index& index){
                 ++tempOutput[1];
                 ++output.falsePositives;
 
-                std::cout << "FP" << std::endl;
-
             } else {
 
             }
         }
-
-        std::cout << tempOutput[0] << " | " << tempOutput[1] << " | " << tempOutput[2] << std::endl;
 
         ++output.nReadsProcessed;
         ++output.nReadsTotal;
