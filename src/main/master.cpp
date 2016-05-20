@@ -124,7 +124,6 @@ void Master::processBatches(uint i){
         this->protector.lock(); // LOCK
 
         if(this->nextBatchStart > this->nReads){
-            std::cout << "I'm out !" << std::endl;
             this->protector.unlock();
             return;
         }
@@ -151,11 +150,9 @@ void Master::processBatches(uint i){
         for (; (it != end); ++it){ // iterator is initialized before, no need to put it in loop declaration.
 
             Triplet r = it->second;
-
             analyze(r, this->output, this->referenceGenome);
         }
     }
-
 }
 
 
@@ -179,6 +176,8 @@ void Master::loadOriginalFile() {
     Triplet t;
 
     while(std::getline(file, line)){
+
+
 
         if (line[0] == '>') {
 
@@ -236,6 +235,8 @@ void Master::loadCorrectedFile(){
     Triplet t;
 
     while(std::getline(file, line)){
+
+
 
         if (line[0] == '>') {
 
