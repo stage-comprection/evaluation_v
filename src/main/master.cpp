@@ -127,6 +127,7 @@ void Master::processBatches(uint i){
             this->protector.unlock();
             return;
         }
+
         std::cout << "Starting new batch in thread " << i << " (Progress : " << 100*this->nextBatchStart / this->nReads << " %)." << std::endl;
 
         readMap::iterator it = reads.begin();
@@ -176,8 +177,6 @@ void Master::loadOriginalFile() {
     Triplet t;
 
     while(std::getline(file, line)){
-
-
 
         if (line[0] == '>') {
 

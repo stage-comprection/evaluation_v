@@ -3,7 +3,7 @@
 #include "utils.h"
 #include <bitset>
 
-typedef std::bitset<500> read;
+typedef std::bitset<200> read;
 
 // Convert a sequence of char into binary
 read seq2bin(std::string& seq, const uint s);
