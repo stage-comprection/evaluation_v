@@ -336,14 +336,18 @@ void Master::loadFiles() {
 
     std::cout << "Loading files " << std::endl;
 
-    std::thread loadOriginal(&Master::loadOriginalFile, this);
-    std::thread loadCorrected(&Master::loadCorrectedFile, this);
-    std::thread loadReference(&Master::loadReferenceFile, this);
+//    std::thread loadOriginal(&Master::loadOriginalFile, this);
+//    std::thread loadCorrected(&Master::loadCorrectedFile, this);
+//    std::thread loadReference(&Master::loadReferenceFile, this);
 
-    // Synchronizes threads:
-    loadOriginal.join();
-    loadCorrected.join();
-    loadReference.join();
+//    // Synchronizes threads:
+//    loadOriginal.join();
+//    loadCorrected.join();
+//    loadReference.join();
+
+    loadOriginalFile();
+    loadCorrectedFile();
+    loadReferenceFile();
 
     std::cout << "All files loaded. Total reads : " << this->reads.size() << std::endl;
 
