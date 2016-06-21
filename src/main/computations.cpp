@@ -42,9 +42,13 @@ void analyze(Triplet& t, Output& output, hash_index& index){
                 if (mapRead(t, 31, index)){
 
                     ++output.correctedInRef;
+
+                } else {
+
+                    ++tempOutput[1];
+                    ++output.falsePositives;
                 }
-                ++tempOutput[1];
-                ++output.falsePositives;
+
 
             } else {
 
