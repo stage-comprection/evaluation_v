@@ -39,6 +39,10 @@ void analyze(Triplet& t, Output& output, hash_index& index){
 
             } else if (t.corrected[i] != t.original[i] or t.corrected[i+1] != t.original[i+1]) {
 
+                if (mapRead(t, 31, index)){
+
+                    ++output.correctedInRef;
+                }
                 ++tempOutput[1];
                 ++output.falsePositives;
 
@@ -68,7 +72,6 @@ void analyze(Triplet& t, Output& output, hash_index& index){
 
                     if (mapRead(t, 31, index)){
 
-                        ++output.correctedInRef;
                         output.falseNegatives -= tempOutput[2];
                         output.falsePositives -= tempOutput[1];
                         output.truePositives += tempOutput[2];
